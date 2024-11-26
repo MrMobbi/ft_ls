@@ -1,8 +1,7 @@
 
 # COMPILATION
 CC				= gcc 
-FLAGS			= -Wall -Werror -Wextra
-FLAGS_DEBUG		= -g -fsanitize=address
+FLAGS			= -Wall -Werror -Wextra -g
 
 # EXECUTABLE
 NAME		= ft_ls
@@ -14,6 +13,11 @@ INC_PATH	= -I incl
 
 	### SOURCES FILES ###
 FILES		= main.c \
+			  list_utils.c \
+			  utils.c \
+			  init_main_struct.c \
+			  exit.c \
+			  print.c
 
 			  # OBJECT FILES
 
@@ -47,7 +51,7 @@ art:
 
 $(NAME):	$(OBJS)
 			@$(NL_TXT)
-			@$(CC) $(FLAGS) -o $(NAME) $(OBJS)
+			$(CC) $(FLAGS) -o $(NAME) $(OBJS)
 			@$(END_TXT)
 
 tmp:
@@ -55,7 +59,7 @@ tmp:
 
 $(OBJS_PATH)/%.o:	$(SRCS_PATH)/%.c 
 					@/bin/mkdir -p $(@D)
-					@$(CC) $(FLAGS) $(INC_PATH) -c $< -o $@
+					$(CC) $(FLAGS) $(INC_PATH) -c $< -o $@
 					@$(CHARG_LINE_TXT)
 
 clean:
@@ -64,7 +68,7 @@ clean:
 
 fclean:		clean
 			@$(FCLEAN_TXT)
-			@rm -rf $(NAME) $(HOSTLIB) $(TEST_N)
+			rm -rf $(NAME) $(HOSTLIB) $(TEST_N)
 			@$(NL_TXT)
 
 re:			fclean all
