@@ -1,39 +1,56 @@
 
 #include "../incl/ft_ls.h"
 
-static void	ft_file_get_name(t_ls *ls)
+static void	ft_token_prompt(t_ls *ls, int ac, char **av)
 {
-	struct dirent	*de;
-	ls->dir = opendir(ls->path);
-	if (ls->dir == NULL)
-		exit(1); // todo exit function
-	int i = 0;
-	while ((de = readdir(ls->dir)) != NULL)
+	(void) ls;
+	for (int i = 1; i < ac; i ++)
 	{
-		if (i == 0)
-			ls->start = ft_list_new(de);
+		if (i == 1)
+			ls->token = ft_lst_token_new(av[i]);
 		else
-			ft_list_add(ls->start, ft_list_new(de));
-		i++;
+			ft_lst_token_add(ls->token,ft_lst_token_new(av[i]));
 	}
-	db_list_print(ls->start);
 }
 
-t_ls *ft_init_main_struct(int ac, char **av)
+static void	ft_token_check(t_ls *ls)
 {
-	(void) av;
-	t_ls *new = malloc(sizeof(t_ls));
-	if (!new)
-		exit(1); // todo exit function
-	if (ac == 1)
+	if (ls->token == NULL)
+		ls->token = ft_lst_token_new(D_DEFAULT_PATH);
+	else
 	{
-		new->path = malloc(sizeof(char) * 2);
-		if (!new->path)
-			exit(1); // todo exit function
-		new->path[0] = '.';
-		new->path[1] = '\0';
-		printf("new->path = [%s]\n", new->path);
+		bool path = false;
+		t_token	*node = ls->token;
+		while (node != NULL)
+		{
+			if (node->path)
+				path = true;
+			node = node->next;
+		}
+		if (!path)
+			ft_lst_token_add(ls->token, ft_lst_token_new(D_DEFAULT_PATH));
 	}
-	ft_file_get_name(new);
-	return (new);
+}
+
+static void	ft_token_option_get(t_ls *ls)
+{
+	t_token	*node = ls->token;
+	while (node != NULL)
+	{
+		if (node->option)
+		{
+			ft_option_check_dash(node->name);
+			ls->option = ft_option_add(ls->option, node->name);
+		}
+		node = node->next;
+	}
+}
+
+void	ft_init_main_struct(t_ls *ls, int ac, char **av)
+{
+	ft_token_prompt(ls, ac, av);
+	ft_token_check(ls);
+	ft_token_option_get(ls);
+	db_print_token(ls->token);
+	printf("###\nls->option [%s]\n", ls->option);
 }
