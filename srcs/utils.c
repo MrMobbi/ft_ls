@@ -14,9 +14,8 @@ size_t	ft_strlen(char *str)
 char	*ft_str_dup(char *str)
 {
 	char	*new = malloc(ft_strlen(str) + 1);
-	
 	if (!new)
-		exit(1); // todo exit function
+		ft_error(D_ERR_MSG_MALLOC, E_ERR_MALLOC);
 	for (size_t i = 0; i < ft_strlen(str); i++)
 		new[i] = str[i];
 	new[ft_strlen(str)] = '\0';
@@ -35,4 +34,24 @@ bool	ft_str_cmp(char *str1, char *str2)
 	if (str1[i] != str2[i])
 		return false;
 	return true;
+}
+
+char	*ft_str_join(char *str1, char str2)
+{
+	char	*nw = malloc(sizeof(char) * (ft_strlen(str1) + ft_strlen(str2) + 1));
+	if (!nw)
+		ft_error(D_ERR_MSG_MALLOC, E_ERR_MALLOC);
+	size_t current = 0;
+	for (size_t i = 0; i < ft_strlen(str1); i++)
+	{
+		nw[current] = str1[i];
+		current++;
+	}
+	for (size_t i = 0; i < ft_strlen(str2); i++)
+	{
+		nw[current] = str2[i];
+		current++;
+	}
+	nw[current] = '\0';
+	return nw;
 }

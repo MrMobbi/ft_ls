@@ -46,11 +46,28 @@ static void	ft_token_option_get(t_ls *ls)
 	}
 }
 
+static void	ft_path_get(t_ls *ls)
+{
+	t_token	*node = ls->token;
+	while (node != NULL)
+	{
+		if (node->path)
+		{
+			if (ls->path == NULL)
+				ls->path = ft_lst_path_new(node->name);
+			else
+				ft_lst_path_add(ls->path, ft_list_path_new(node->name));
+		}
+		node = node->next;
+	}
+}
+
 void	ft_init_main_struct(t_ls *ls, int ac, char **av)
 {
 	ft_token_prompt(ls, ac, av);
 	ft_token_check(ls);
 	ft_token_option_get(ls);
+	ft_path_get(ls);
 	db_print_token(ls->token);
 	printf("###\nls->option [%s]\n", ls->option);
 }

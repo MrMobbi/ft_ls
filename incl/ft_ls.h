@@ -40,8 +40,8 @@ typedef struct s_token {
 
 typedef struct s_path {
 	char	*name;
-	DIR		*dr;
-	struct dirent	*de;
+	DIR		*p_dir;
+	struct dirent	*p_dirent;
 	struct s_path	*next;
 }	t_path;
 
@@ -57,6 +57,7 @@ void	ft_init_main_struct(t_ls *ls, int ac, char **av);
 // utils_list
 t_token	*ft_lst_token_new(char *str);
 void	ft_lst_token_add(t_token *start, t_token *nw);
+t_path	*ft_lst_path_new(char *str);
 
 // utils_option
 void	ft_option_check_dash(char *str);
@@ -66,6 +67,7 @@ char	*ft_option_add(char *option, char *add);
 size_t	ft_strlen(char *str);
 char	*ft_str_dup(char *str);
 bool	ft_str_cmp(char *str1, char *str2);
+char	*ft_str_join(char *str1, char str2);
 
 // exit
 void	ft_error(char *msg, int rt_error);
