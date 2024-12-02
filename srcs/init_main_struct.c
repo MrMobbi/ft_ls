@@ -3,7 +3,6 @@
 
 static void	ft_token_prompt(t_ls *ls, int ac, char **av)
 {
-	(void) ls;
 	for (int i = 1; i < ac; i ++)
 	{
 		if (i == 1)
