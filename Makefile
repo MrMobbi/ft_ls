@@ -15,6 +15,7 @@ INC_PATH	= -I incl
 FILES		= main.c \
 			  utils_list.c \
 			  utils_option.c \
+			  utils_path.c \
 			  utils.c \
 			  init_main_struct.c \
 			  error.c \

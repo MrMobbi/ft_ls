@@ -20,3 +20,9 @@ void	ft_error_option(char c)
 	printf("%s\n", D_ERR_MSG_HELP);
 	exit(2);
 }
+
+void	ft_error_path(char *file)
+{
+	printf("ls: cannot acces '%s': No such file or directory\n", file);
+	exit(2);
+}

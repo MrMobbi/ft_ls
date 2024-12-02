@@ -36,7 +36,7 @@ bool	ft_str_cmp(char *str1, char *str2)
 	return true;
 }
 
-char	*ft_str_join(char *str1, char str2)
+char	*ft_str_join(char *str1, char *str2)
 {
 	char	*nw = malloc(sizeof(char) * (ft_strlen(str1) + ft_strlen(str2) + 1));
 	if (!nw)

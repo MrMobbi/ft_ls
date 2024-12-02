@@ -41,6 +41,7 @@ typedef struct s_token {
 typedef struct s_path {
 	char	*name;
 	DIR		*p_dir;
+	bool	file;
 	struct dirent	*p_dirent;
 	struct s_path	*next;
 }	t_path;
@@ -58,27 +59,33 @@ void	ft_init_main_struct(t_ls *ls, int ac, char **av);
 t_token	*ft_lst_token_new(char *str);
 void	ft_lst_token_add(t_token *start, t_token *nw);
 t_path	*ft_lst_path_new(char *str);
+void	ft_lst_path_add(t_path *start, t_path *nw);
 
 // utils_option
 void	ft_option_check_dash(char *str);
 char	*ft_option_add(char *option, char *add);
 
+//	utils_path
+char	*ft_path_check(char *str);
+
 // utils
 size_t	ft_strlen(char *str);
 char	*ft_str_dup(char *str);
 bool	ft_str_cmp(char *str1, char *str2);
-char	*ft_str_join(char *str1, char str2);
+char	*ft_str_join(char *str1, char *str2);
 
 // exit
 void	ft_error(char *msg, int rt_error);
 void	ft_error_dash(char *unknow);
 void	ft_error_option(char c);
+void	ft_error_path(char *file);
 
 // print
 void	ft_print(t_ls *ls);
 void	ft_print_help(void);
 
 // debug
-void	db_print_token(t_token *token);
+void	db_print_token(t_token *start);
+void	db_print_path(t_path *start);
 
 #endif

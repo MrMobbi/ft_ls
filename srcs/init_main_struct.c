@@ -56,7 +56,7 @@ static void	ft_path_get(t_ls *ls)
 			if (ls->path == NULL)
 				ls->path = ft_lst_path_new(node->name);
 			else
-				ft_lst_path_add(ls->path, ft_list_path_new(node->name));
+				ft_lst_path_add(ls->path, ft_lst_path_new(node->name));
 		}
 		node = node->next;
 	}
@@ -68,6 +68,10 @@ void	ft_init_main_struct(t_ls *ls, int ac, char **av)
 	ft_token_check(ls);
 	ft_token_option_get(ls);
 	ft_path_get(ls);
+	printf("---- DEBUG ----\n");
+	printf("# Printing TOKEN: #\n");
 	db_print_token(ls->token);
+	printf("# Printing PATH: #\n");
+	db_print_path(ls->path);
 	printf("###\nls->option [%s]\n", ls->option);
 }
