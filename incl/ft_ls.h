@@ -65,9 +65,6 @@ void	ft_lst_path_add(t_path *start, t_path *nw);
 void	ft_option_check_dash(char *str);
 char	*ft_option_add(char *option, char *add);
 
-//	utils_path
-char	*ft_path_check(char *str);
-
 // utils
 size_t	ft_strlen(char *str);
 char	*ft_str_dup(char *str);
@@ -85,6 +82,7 @@ void	ft_print(t_ls *ls);
 void	ft_print_help(void);
 
 // debug
+void	db_print_ls(t_ls *ls);
 void	db_print_token(t_token *start);
 void	db_print_path(t_path *start);
 

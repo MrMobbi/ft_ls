@@ -3,6 +3,17 @@
 
 void	ft_print(t_ls *ls)
 {
+	/*
+    // Process each entry.
+
+    while ((pDirent = readdir(pDir)) != NULL) {
+		printf ("[%s]\n", pDirent->d_name);
+    }
+
+    // Close directory and exit.
+
+	closedir (pDir);
+	*/
 	(void) ls;
 }
 

@@ -1,5 +1,14 @@
 
 #include "../incl/ft_ls.h"
+void	db_print_ls(t_ls *ls)
+{
+	printf("---- DEBUG ----\n");
+	printf("# Printing TOKEN: #\n");
+	db_print_token(ls->token);
+	printf("# Printing PATH: #\n");
+	db_print_path(ls->path);
+	printf("###\nls->option [%s]\n", ls->option);
+}
 
 void	db_print_token(t_token *start)
 {

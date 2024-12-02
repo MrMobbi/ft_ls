@@ -15,6 +15,8 @@ static void	ft_token_prompt(t_ls *ls, int ac, char **av)
 
 static void	ft_token_check(t_ls *ls)
 {
+	// This function check if a path is given, 
+	// if not the program will set a default path
 	if (ls->token == NULL)
 		ls->token = ft_lst_token_new(D_DEFAULT_PATH);
 	else
@@ -68,10 +70,5 @@ void	ft_init_main_struct(t_ls *ls, int ac, char **av)
 	ft_token_check(ls);
 	ft_token_option_get(ls);
 	ft_path_get(ls);
-	printf("---- DEBUG ----\n");
-	printf("# Printing TOKEN: #\n");
-	db_print_token(ls->token);
-	printf("# Printing PATH: #\n");
-	db_print_path(ls->path);
-	printf("###\nls->option [%s]\n", ls->option);
+	db_print_ls(ls);
 }
