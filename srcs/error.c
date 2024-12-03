@@ -9,7 +9,7 @@ void	ft_error(char *msg, int rt_error)
 
 void	ft_error_dash(char *unknow)
 {
-	printf("%s --%s\n", D_ERR_MSG_UNRECO_OPTION, unknow);
+	printf("%s '--%s'\n", D_ERR_MSG_UNRECO_OPTION, unknow);
 	printf("%s\n", D_ERR_MSG_HELP);
 	exit(2);
 }

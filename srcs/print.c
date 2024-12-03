@@ -1,20 +1,9 @@
 
 #include "../incl/ft_ls.h"
 
-void	ft_print(t_ls *ls)
+void	ft_print(t_path *start)
 {
-	/*
-    // Process each entry.
-
-    while ((pDirent = readdir(pDir)) != NULL) {
-		printf ("[%s]\n", pDirent->d_name);
-    }
-
-    // Close directory and exit.
-
-	closedir (pDir);
-	*/
-	(void) ls;
+	(void) start;
 }
 
 void	ft_print_help(void)
