@@ -22,20 +22,6 @@ char	*ft_str_dup(char *str)
 	return (new);
 }
 
-bool	ft_str_cmp(char *str1, char *str2)
-{
-	int	i = 0;
-	while (str1[i] != '\0')
-	{
-		if (str1[i] != str2[i])
-			return false;
-		i++;
-	}
-	if (str1[i] != str2[i])
-		return false;
-	return true;
-}
-
 char	*ft_str_join(char *str1, char *str2)
 {
 	char	*nw = malloc(sizeof(char) * (ft_strlen(str1) + ft_strlen(str2) + 1));
@@ -76,4 +62,15 @@ char	*ft_str_join_path(char *start, char *file)
 	}
 	path[current] = '\0';
 	return (path);
+}
+
+int	ft_str_cmp(char *str1, char *str2)
+{
+	size_t length = ft_strlen(str1);
+	for (size_t i = 0; i < length; i++)
+	{
+		if (str1[i] != str2[i])
+			return ((int)(str1[i] - str2[i]));
+	}
+	return (0);
 }

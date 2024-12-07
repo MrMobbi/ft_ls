@@ -1,7 +1,7 @@
 
 #include "../incl/ft_ls.h"
 
-static void	db_print_token(t_token *start)
+void	db_print_token(t_token *start)
 {
 	t_token	*node = start;
 	while (node != NULL)
@@ -14,7 +14,7 @@ static void	db_print_token(t_token *start)
 	}
 }
 
-static void	db_print_file(t_file *start)
+void	db_print_file(t_file *start)
 {
 	t_file	*node = start;
 	while (node != NULL)
@@ -37,15 +37,17 @@ static void	db_print_file(t_file *start)
 				printf("Unknown file\n");
 		}
 		node = node->next;
-	}
+}
 }
 
-static void	db_print_path(t_path *start)
+void	db_print_path(t_path *start)
 {
 	t_path	*node = start;
 	while (node != NULL)
 	{
-		printf("#\n");
+		printf(D_BLUE);
+		printf("# PATH\n");
+		printf(D_RESET);
 		printf("Path name [%s] #\n", node->name);
 		printf(D_RED);
 		printf("#### Printing FILE ####\n");
@@ -68,7 +70,7 @@ void	db_print_ls(t_ls *ls)
 	printf(D_RESET);
 	db_print_token(ls->token);
 	printf(D_CYAN);
-	printf("#### Printing PATH: ####\n");
+	printf("#### Printing PATHS and FILES: ####\n");
 	printf(D_RESET);
 	db_print_path(ls->path);
 	printf(D_CYAN);

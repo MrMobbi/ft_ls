@@ -97,9 +97,9 @@ char	*ft_option_add(char *option, char *add);
 // utils
 size_t	ft_strlen(char *str);
 char	*ft_str_dup(char *str);
-bool	ft_str_cmp(char *str1, char *str2);
 char	*ft_str_join(char *str1, char *str2);
 char	*ft_str_join_path(char *start, char *file);
+int		ft_str_cmp(char *str1, char *str2);
 
 // exit
 void	ft_error(char *msg, int rt_error);
@@ -113,5 +113,8 @@ void	ft_print_help(void);
 
 // debug
 void	db_print_ls(t_ls *ls);
+void	db_print_file(t_file *file);
+void	db_print_path(t_path *path);
+void	db_print_token(t_token *toke);
 
 #endif

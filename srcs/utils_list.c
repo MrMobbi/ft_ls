@@ -42,9 +42,10 @@ t_path	*ft_lst_path_new(char *str)
 	t_path	*nw = malloc(sizeof(t_path));
 	if (!nw)
 		ft_error(D_ERR_MSG_MALLOC, E_ERR_MALLOC);
-	nw->folder = false;
 	nw->name = ft_str_dup(str);
+	nw->folder = false;
 	nw->next = NULL;
+	nw->file = NULL;
 	struct stat	s;
 	printf("[%s]\n", str);
 	if (stat(nw->name, &s) == 0)
@@ -54,6 +55,7 @@ t_path	*ft_lst_path_new(char *str)
 			DIR				*p_dir;
 			struct dirent	*p_dirent;
 			p_dir = opendir(nw->name); //DIR
+			nw->folder = true;
 			if (p_dir == NULL)
 				ft_error("opendir failled\n", 2); // todo proper message error
 			while ((p_dirent = readdir(p_dir)) != NULL)

@@ -69,5 +69,5 @@ void	ft_init_main_struct(t_ls *ls, int ac, char **av)
 	ft_token_check(ls);
 	ft_token_option_get(ls);
 	ft_path_get(ls);
-	db_print_ls(ls);
+	//db_print_ls(ls);
 }
