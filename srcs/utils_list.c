@@ -42,10 +42,11 @@ t_path	*ft_lst_path_new(char *str)
 	t_path	*nw = malloc(sizeof(t_path));
 	if (!nw)
 		ft_error(D_ERR_MSG_MALLOC, E_ERR_MALLOC);
-	nw->file = false;
+	nw->folder = false;
 	nw->name = ft_str_dup(str);
 	nw->next = NULL;
 	struct stat	s;
+	printf("[%s]\n", str);
 	if (stat(nw->name, &s) == 0)
 	{
 		if (S_ISDIR(s.st_mode))
@@ -58,9 +59,9 @@ t_path	*ft_lst_path_new(char *str)
 			while ((p_dirent = readdir(p_dir)) != NULL)
 			{
 				if (nw->file == NULL)
-					nw->file = ft_lst_file_new(p_dirent->d_name);
+					nw->file = ft_lst_file_new(p_dirent->d_name, nw->name);
 				else
-					ft_lst_file_add(nw->file, ft_lst_file_new(p_dirent->d_name));
+					ft_lst_file_add(nw->file, ft_lst_file_new(p_dirent->d_name, nw->name));
 			}
 			closedir(p_dir);
 		}
@@ -91,15 +92,16 @@ void	ft_lst_path_free(t_path *start)
 	}
 }
 
-t_file	*ft_lst_file_new(char *str)
+t_file	*ft_lst_file_new(char *name, char *dir)
 {
 	t_file	*nw = malloc(sizeof(t_file));
 	if (!nw)
 		ft_error(D_ERR_MSG_MALLOC, E_ERR_MALLOC);
-	nw->name = ft_str_dup(str);
+	nw->name = ft_str_dup(name);
+	nw->path = ft_str_join_path(dir, name);
 	nw->next = NULL;
 	struct stat	s;
-	if (stat(nw->name, &s) == 0)
+	if (stat(nw->path, &s) == 0)
 	{
 		if (S_ISREG(s.st_mode) && (s.st_mode & (S_IXUSR | S_IXGRP | S_IXOTH)))
 			nw->type = E_EXEC; // check if the bit is exec and a file
@@ -108,10 +110,17 @@ t_file	*ft_lst_file_new(char *str)
 		else if (S_ISDIR(s.st_mode)) // check the bit from a macro
 			nw->type = E_DIR;
 		else
+		{
+			printf("here\n");
+			printf("%s | %d", strerror(errno), errno);;
 			exit(3); // todo proper error handling
+		}
 	}
 	else
+	{
+		printf("%s | %d", strerror(errno), errno);;
 		exit(3); // todo proper exit
+	}
 	return (nw);
 }
 

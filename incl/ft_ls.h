@@ -26,6 +26,14 @@
 # define D_DEFAULT_PATH		"."
 # define D_ALL_OPTION		"lartR"
 
+// COLORS
+# define D_RED		"\033[31m"
+# define D_GREEN	"\033[32m"
+# define D_BLUE		"\033[34m"
+# define D_MAGENTA	"\033[35m"
+# define D_CYAN		"\033[36m"
+# define D_RESET	"\033[0m"
+
 enum e_error{
 	E_ERR_MALLOC = 1,
 	E_ERR_EXIT = 2,
@@ -37,12 +45,15 @@ enum e_file_type {
 	E_EXEC = 3,
 };
 
-typedef struct s_file {
-	char	*name;
-	int		type;
-	struct s_file	*next;
-}	t_file;
+//	main data struct
+typedef struct s_ls {
+	char	*option;
+	size_t	nb_to_print;
+	struct s_token	*token;
+	struct s_path	*path;
+}	t_ls;
 
+// tokenizing the args
 typedef struct s_token {
 	char	*name;
 	bool	option;
@@ -50,17 +61,21 @@ typedef struct s_token {
 	struct s_token	*next;
 }	t_token;
 
+// path to the file or the directory
 typedef struct s_path {
 	char	*name;
-	struct s_file	*file;
+	bool	folder;
+	struct s_file	*file; // <- if directory this is the chain list to files in it
 	struct s_path	*next;
 }	t_path;
 
-typedef struct s_ls {
-	char	*option;
-	struct s_token	*token;
-	struct s_path	*path;
-}	t_ls;
+// files that are in the directory
+typedef struct s_file {
+	char	*name;
+	char	*path;
+	int		type;
+	struct s_file	*next;
+}	t_file;
 
 // init_main_struct
 void	ft_init_main_struct(t_ls *ls, int ac, char **av);
@@ -72,7 +87,7 @@ void	ft_lst_token_free(t_token *start);
 t_path	*ft_lst_path_new(char *str);
 void	ft_lst_path_add(t_path *start, t_path *nw);
 void	ft_lst_path_free(t_path *start);
-t_file	*ft_lst_file_new(char *str);
+t_file	*ft_lst_file_new(char *name, char *dir);
 void	ft_lst_file_add(t_file *start, t_file *nw);
 
 // utils_option
@@ -84,6 +99,7 @@ size_t	ft_strlen(char *str);
 char	*ft_str_dup(char *str);
 bool	ft_str_cmp(char *str1, char *str2);
 char	*ft_str_join(char *str1, char *str2);
+char	*ft_str_join_path(char *start, char *file);
 
 // exit
 void	ft_error(char *msg, int rt_error);
@@ -92,7 +108,7 @@ void	ft_error_option(char c);
 void	ft_error_path(char *file);
 
 // print
-void	ft_print(t_path *start);
+void	ft_print(t_ls ls);
 void	ft_print_help(void);
 
 // debug

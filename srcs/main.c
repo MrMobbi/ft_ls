@@ -14,7 +14,7 @@ int main(int ac, char **av)
 {
 	t_ls	ls = {};
 	ft_init_main_struct(&ls, ac, av);
-	ft_print(ls.path);
+	ft_print(ls);
 	ft_quit(&ls);
 	return (0);
 }

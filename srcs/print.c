@@ -1,9 +1,9 @@
 
 #include "../incl/ft_ls.h"
 
-void	ft_print(t_path *start)
+void	ft_print(t_ls ls)
 {
-	(void) start;
+	(void) ls;
 }
 
 void	ft_print_help(void)
