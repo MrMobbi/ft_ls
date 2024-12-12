@@ -78,3 +78,13 @@ char	*ft_option_add(char *option, char *add)
 	}
 	return (option);
 }
+
+bool	ft_option_checker(char *str, char option)
+{
+	if (str == NULL)
+		return (false);
+	for (size_t i = 0; str[i] != '\0'; i++)
+		if (str[i] == option)
+			return (true);
+	return (false);
+}

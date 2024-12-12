@@ -33,6 +33,21 @@ void	db_print_file(t_file *start)
 			case (E_EXEC):
 				printf("it's an executable\n");
 				break;
+			case (E_CURRENT):
+				printf("file is the current folder\n");
+				break;
+			case (E_PREVIOUS):
+				printf("file is the previous folder\n");
+				break;
+			case (E_FILE_HIDE):
+				printf("hiden file\n");
+				break;
+			case (E_DIR_HIDE):
+				printf("hiden folder\n");
+				break;
+			case (E_EXEC_HIDE):
+				printf("hiden executable\n");
+				break;
 			default:
 				printf("Unknown file\n");
 		}

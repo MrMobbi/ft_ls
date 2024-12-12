@@ -13,8 +13,9 @@ INC_PATH	= -I incl
 
 	### SOURCES FILES ###
 FILES		= main.c \
-			  utils_list.c \
-			  utils_option.c \
+			  list_utils.c \
+			  option_apply.c \
+			  option_utils.c \
 			  utils.c \
 			  init_main_struct.c \
 			  error.c \

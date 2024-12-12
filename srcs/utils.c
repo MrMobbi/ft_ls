@@ -66,11 +66,12 @@ char	*ft_str_join_path(char *start, char *file)
 
 int	ft_str_cmp(char *str1, char *str2)
 {
-	size_t length = ft_strlen(str1);
-	for (size_t i = 0; i < length; i++)
+	int	i = 0;
+	while (str1[i] != '\0')
 	{
 		if (str1[i] != str2[i])
 			return ((int)(str1[i] - str2[i]));
+		i++;
 	}
-	return (0);
+	return ((int)(str1[i] - str2[i]));
 }

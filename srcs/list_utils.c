@@ -47,7 +47,6 @@ t_path	*ft_lst_path_new(char *str)
 	nw->next = NULL;
 	nw->file = NULL;
 	struct stat	s;
-	printf("[%s]\n", str);
 	if (stat(nw->name, &s) == 0)
 	{
 		if (S_ISDIR(s.st_mode))
@@ -80,6 +79,12 @@ void	ft_lst_path_add(t_path *start, t_path *nw)
 	while (node->next != NULL)
 		node = node->next;
 	node->next = nw;
+}
+
+void	ft_lst_path_add_here(t_path *here, t_path *nw)
+{
+	nw->next = here->next;
+	here->next = nw;
 }
 
 void	ft_lst_path_free(t_path *start)
@@ -117,6 +122,12 @@ t_file	*ft_lst_file_new(char *name, char *dir)
 			printf("%s | %d", strerror(errno), errno);;
 			exit(3); // todo proper error handling
 		}
+		if (nw->name[0] == '.')
+			nw->type += 10;
+		if (!ft_str_cmp(nw->name, "."))
+			nw->type = E_CURRENT;
+		else if (!ft_str_cmp(nw->name, ".."))
+			nw->type = E_PREVIOUS;
 	}
 	else
 	{

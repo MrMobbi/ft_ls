@@ -3,7 +3,32 @@
 
 void	ft_print(t_ls ls)
 {
-	(void) ls;
+	t_path	*path = ls.path;
+	
+	while (path != NULL)
+	{
+		if (path->folder)
+		{
+			t_file	*file = path->file;
+			printf("%s:\n", path->name);
+			while (file != NULL)
+			{
+				if (file->type < 10)
+				{
+					printf(file->name);
+					if (file->next != NULL)
+						printf(" ");
+				}
+				file = file->next;
+			}
+			if (path->next != NULL)
+				printf("\n\n");
+		}
+		else
+			printf(path->name);
+		path = path->next;
+	}
+	printf("\n");
 }
 
 void	ft_print_help(void)

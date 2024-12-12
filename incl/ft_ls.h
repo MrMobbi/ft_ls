@@ -34,6 +34,16 @@
 # define D_CYAN		"\033[36m"
 # define D_RESET	"\033[0m"
 
+
+// the C mean if letter is capital
+enum e_option {
+	E_OPTION_CR = 82,
+	E_OPTION_A = 97,
+	E_OPTION_L = 108,
+	E_OPTION_R = 114,
+	E_OPTION_T = 116,
+};
+
 enum e_error{
 	E_ERR_MALLOC = 1,
 	E_ERR_EXIT = 2,
@@ -43,12 +53,17 @@ enum e_file_type {
 	E_FILE = 1,
 	E_DIR = 2,
 	E_EXEC = 3,
+	E_CURRENT = 14,
+	E_PREVIOUS = 15,
+	E_FILE_HIDE = 11,
+	E_DIR_HIDE = 12,
+	E_EXEC_HIDE = 13,
 };
 
 //	main data struct
 typedef struct s_ls {
 	char	*option;
-	size_t	nb_to_print;
+	int		nb_to_print;
 	struct s_token	*token;
 	struct s_path	*path;
 }	t_ls;
@@ -86,13 +101,18 @@ void	ft_lst_token_add(t_token *start, t_token *nw);
 void	ft_lst_token_free(t_token *start);
 t_path	*ft_lst_path_new(char *str);
 void	ft_lst_path_add(t_path *start, t_path *nw);
+void	ft_lst_path_add_here(t_path *here, t_path *nw);
 void	ft_lst_path_free(t_path *start);
 t_file	*ft_lst_file_new(char *name, char *dir);
 void	ft_lst_file_add(t_file *start, t_file *nw);
 
-// utils_option
+// option_utils
 void	ft_option_check_dash(char *str);
 char	*ft_option_add(char *option, char *add);
+bool	ft_option_checker(char *str, char c);
+
+// option_apply
+void	ft_recursive(t_path	*start);
 
 // utils
 size_t	ft_strlen(char *str);
