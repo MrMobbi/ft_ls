@@ -1,41 +1,69 @@
 
 #include "../incl/ft_ls.h"
 
+void	ft_print_multiple(t_ls ls)
+{
+	t_path	*path = ls.path;
+	printf("\n");
+}
+
+void	ft_print_folder(t_path *path)
+{
+	t_file	*file = path->file;
+
+	while (file != NULL)
+	{
+		if (file->type < 10)
+			printf(file->name);
+		if (file->next != NULL)
+			printf(" ");
+		file = file->next;
+	}
+	printf("\n");
+}
+
+void	ft_print_single(t_ls ls)
+{
+	printf("PRINTING SINGLE\n");
+	t_path	*path = ls.path;
+	if (path->folder == true)
+		ft_print_folder(path);
+	else
+	{
+		while (path != NULL)
+		{
+			printf("%s", path->name);
+			if (path->next != NULL)
+				printf(" ");
+			path = path->next;
+		}
+		printf("\n");
+	}
+}
+
 void	ft_print(t_ls ls)
 {
 	t_path	*path = ls.path;
-	
+	int		different = 0;
 	while (path != NULL)
 	{
-		if (path->folder)
-		{
-			t_file	*file = path->file;
-			printf("%s:\n", path->name);
-			while (file != NULL)
-			{
-				if (file->type < 10)
-				{
-					printf(file->name);
-					if (file->next != NULL)
-						printf(" ");
-				}
-				file = file->next;
-			}
-			if (path->next != NULL)
-				printf("\n\n");
-		}
-		else
-			printf(path->name);
+		if (path->folder == true)
+			different++;
+		if (different == 0)
+			different++;
 		path = path->next;
 	}
-	printf("\n");
+	if (different > 1)
+		ft_print_multiple(ls);
+	else
+		ft_print_single(ls);
 }
 
 void	ft_print_help(void)
 {
 	printf("Usage: ls [OPTION]... [FILE]...\n"\
 			"List information about the FILEs (the current directory by default).\n"\
-			"Sort entries alphabetically if none of -cftuvSUX nor --sort is specified.\n\n"\
+			"Sort entries alphabetically if -tr is specified.\n\n"\
 			"Mandatory arguments to long options are mandatory for short options too.\n"\
 			"-a, --all                  do not ignore entries starting with .\n"\
 			"-l                         use a long listing format\n"\
@@ -59,8 +87,6 @@ void	ft_print_help(void)
 			" 0  if OK,\n"\
 			" 1  if minor problems (e.g., cannot access subdirectory),\n"\
 			" 2  if serious trouble (e.g., cannot access command-line argument).\n"\
-			"GNU coreutils online help: <https://www.gnu.org/software/coreutils/>\n"\
-			"Full documentation <https://www.gnu.org/software/coreutils/ls>\n"\
-			"or available locally via: info '(coreutils) ls invocation'\n");
+			"Full documentation <https://github.com/MrMobbi/ft_ls>\n");
 	exit(0);
 }
