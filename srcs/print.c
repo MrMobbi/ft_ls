@@ -1,13 +1,15 @@
 
 #include "../incl/ft_ls.h"
 
-void	ft_print_multiple(t_ls ls)
+static void	ft_print_multiple(t_ls ls)
 {
 	t_path	*path = ls.path;
+	(void) path;
+	printf("PRINTING MULTIPLE");
 	printf("\n");
 }
 
-void	ft_print_folder(t_path *path)
+static void	ft_print_folder(t_path *path)
 {
 	t_file	*file = path->file;
 
@@ -22,7 +24,7 @@ void	ft_print_folder(t_path *path)
 	printf("\n");
 }
 
-void	ft_print_single(t_ls ls)
+static void	ft_print_single(t_ls ls)
 {
 	printf("PRINTING SINGLE\n");
 	t_path	*path = ls.path;
