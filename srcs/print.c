@@ -1,14 +1,6 @@
 
 #include "../incl/ft_ls.h"
 
-static void	ft_print_multiple(t_ls ls)
-{
-	t_path	*path = ls.path;
-	(void) path;
-	printf("PRINTING MULTIPLE");
-	printf("\n");
-}
-
 static void	ft_print_folder(t_path *path)
 {
 	t_file	*file = path->file;
@@ -16,17 +8,31 @@ static void	ft_print_folder(t_path *path)
 	while (file != NULL)
 	{
 		if (file->type < 10)
-			printf(file->name);
-		if (file->next != NULL)
-			printf(" ");
+			printf("%s", file->name);
+		if (file->next != NULL && file->type < 10 && isatty(STDOUT_FILENO))
+			printf("  ");
+		else if (file->next != NULL && file->type < 10 && !isatty(STDOUT_FILENO))
+			printf("\n");
 		file = file->next;
 	}
 	printf("\n");
 }
 
+static void	ft_print_multiple(t_ls ls)
+{
+	t_path	*path = ls.path;
+	while (path!= NULL)
+	{
+		printf("%s:\n", path->name);
+		ft_print_folder(path);
+		if (path->next != NULL)
+			printf("\n");
+		path = path->next;
+	}
+}
+
 static void	ft_print_single(t_ls ls)
 {
-	printf("PRINTING SINGLE\n");
 	t_path	*path = ls.path;
 	if (path->folder == true)
 		ft_print_folder(path);
@@ -35,8 +41,10 @@ static void	ft_print_single(t_ls ls)
 		while (path != NULL)
 		{
 			printf("%s", path->name);
-			if (path->next != NULL)
-				printf(" ");
+			if (path->next != NULL && isatty(STDOUT_FILENO))
+				printf("  ");
+			else if (path->next != NULL && !isatty(STDOUT_FILENO))
+				printf("\n");
 			path = path->next;
 		}
 		printf("\n");
@@ -55,7 +63,7 @@ void	ft_print(t_ls ls)
 			different++;
 		path = path->next;
 	}
-	if (different > 1)
+	if (different > 1 || ls.recur == true)
 		ft_print_multiple(ls);
 	else
 		ft_print_single(ls);

@@ -66,7 +66,10 @@ static void	ft_path_get(t_ls *ls)
 static void	ft_apply_option(t_ls *ls)
 {
 	if (ft_option_checker(ls->option, E_OPTION_CR))
+	{
 		ft_recursive(ls->path);
+		ls->recur = true;
+	}
 }
 
 void	ft_init_main_struct(t_ls *ls, int ac, char **av)
@@ -76,5 +79,5 @@ void	ft_init_main_struct(t_ls *ls, int ac, char **av)
 	ft_token_option_get(ls);
 	ft_path_get(ls);
 	ft_apply_option(ls);
-//	db_print_ls(ls);
+	//db_print_ls(ls);
 }

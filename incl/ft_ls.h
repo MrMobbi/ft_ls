@@ -64,6 +64,7 @@ enum e_file_type {
 typedef struct s_ls {
 	char	*option;
 	int		nb_to_print;
+	bool	recur;
 	struct s_token	*token;
 	struct s_path	*path;
 }	t_ls;

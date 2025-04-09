@@ -9,7 +9,7 @@ void	ft_option_check_dash(char *str)
 		dash++;
 		str++;
 	}
-	if (dash == 2 && ft_str_cmp(str, "help"))
+	if (dash == 2 && ft_str_cmp(str, "help") == 0)
 		ft_print_help();
 	else if (dash > 1)
 		ft_error_dash(str);
