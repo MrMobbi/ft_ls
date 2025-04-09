@@ -74,6 +74,7 @@ static void ft_rearrange_order(t_ls *ls)
 	{
 		if (node->folder == true)
 		{
+			ft_option_file_sort_alpha(&node->file);
 			if (folder_head == NULL)
 			{
 				folder_node = node;
@@ -104,13 +105,16 @@ static void ft_rearrange_order(t_ls *ls)
 		file_node->next = NULL;
 	if (folder_node)
 		folder_node->next = NULL;
-	ft_option_sort_alpha(&file_head);
-	ft_option_sort_alpha(&folder_head);
-	file_node = file_head;
-	while (file_node->next != NULL)
-		file_node = file_node->next;
+	ft_option_path_sort_alpha(&file_head);
+	ft_option_path_sort_alpha(&folder_head);
 	if (file_node != NULL)
-		file_node->next = folder_head;
+	{
+		file_node = file_head;
+		while (file_node->next != NULL)
+			file_node = file_node->next;
+		if (file_node != NULL)
+			file_node->next = folder_head;
+	}
 
 	ls->path = (file_head != NULL) ? file_head : folder_head;
 }

@@ -113,7 +113,8 @@ void	ft_lst_file_add(t_file *start, t_file *nw);
 void	ft_option_check_dash(char *str);
 char	*ft_option_add(char *option, char *add);
 bool	ft_option_checker(char *str, char c);
-void	ft_option_sort_alpha(t_path **head);
+void	ft_option_path_sort_alpha(t_path **head);
+void	ft_option_file_sort_alpha(t_file **head);
 
 // option_apply
 void	ft_apply_recursive(t_path	*start);
