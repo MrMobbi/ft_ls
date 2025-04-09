@@ -106,7 +106,7 @@ void	ft_option_sort_alpha(t_path **head)
 
 		while (ptr != NULL && ptr->next != NULL)
 		{
-			if (ft_str_cmp(ptr->name, ptr->next->name) > 0)
+			if (ft_str_cmp_case(ptr->name, ptr->next->name) > 0)
 			{
 				tmp = ptr->next;
 				ptr->next = tmp->next;

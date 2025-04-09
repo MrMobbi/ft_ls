@@ -75,3 +75,28 @@ int	ft_str_cmp(char *str1, char *str2)
 	}
 	return ((int)(str1[i] - str2[i]));
 }
+
+static char	to_lower(char c)
+{
+	if (c >= 'A' && c <= 'Z')
+		c += 32;
+	return (c);
+}
+
+int	ft_str_cmp_case(char *str1, char *str2)
+{
+	int	i = 0;
+	char	c1;
+	char	c2;
+	while (str1[i] != '\0')
+	{
+		c1 = to_lower(str1[i]);
+		c2 = to_lower(str2[i]);
+		if (c1 != c2)
+			return ((int)(c1 - c2));
+		i++;
+	}
+	c1 = to_lower(str1[i]);
+	c2 = to_lower(str2[i]);
+	return ((int)(c1 - c2));
+}

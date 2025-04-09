@@ -125,6 +125,7 @@ char	*ft_str_dup(char *str);
 char	*ft_str_join(char *str1, char *str2);
 char	*ft_str_join_path(char *start, char *file);
 int		ft_str_cmp(char *str1, char *str2);
+int		ft_str_cmp_case(char *str1, char *str2);
 
 // exit
 void	ft_error(char *msg, int rt_error);
