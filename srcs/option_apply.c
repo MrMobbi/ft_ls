@@ -1,7 +1,7 @@
 
 #include "../incl/ft_ls.h"
 
-void	ft_recursive(t_path *path)
+void	ft_apply_recursive(t_path *path)
 {
 	t_path	*node = path;
 	while (node != NULL)
@@ -15,4 +15,9 @@ void	ft_recursive(t_path *path)
 		}
 		node = node->next;
 	}
+}
+
+void	ft_apply_time(t_ls *ls)
+{
+	(void) ls;
 }

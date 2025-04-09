@@ -81,7 +81,8 @@ typedef struct s_token {
 typedef struct s_path {
 	char	*name;
 	bool	folder;
-	struct s_file	*file; // <- if directory this is the chain list to files in it
+	time_t	time;
+	struct s_file	*file; // <- if folder this is the chain list to files in it
 	struct s_path	*next;
 }	t_path;
 
@@ -90,6 +91,7 @@ typedef struct s_file {
 	char	*name;
 	char	*path;
 	int		type;
+	time_t	time;
 	struct s_file	*next;
 }	t_file;
 
@@ -111,9 +113,11 @@ void	ft_lst_file_add(t_file *start, t_file *nw);
 void	ft_option_check_dash(char *str);
 char	*ft_option_add(char *option, char *add);
 bool	ft_option_checker(char *str, char c);
+void	ft_option_sort_alpha(t_path **head);
 
 // option_apply
-void	ft_recursive(t_path	*start);
+void	ft_apply_recursive(t_path	*start);
+void	ft_apply_time(t_ls *ls);
 
 // utils
 size_t	ft_strlen(char *str);

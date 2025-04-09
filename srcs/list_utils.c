@@ -1,6 +1,8 @@
 
 #include "../incl/ft_ls.h"
 
+//	##### TOKEN #####
+
 t_token	*ft_lst_token_new(char *str)
 {
 	t_token	*nw = malloc(sizeof(t_token));
@@ -37,6 +39,8 @@ void	ft_lst_token_free(t_token *start)
 	}
 }
 
+//	###### PATH ######
+
 t_path	*ft_lst_path_new(char *str)
 {
 	t_path	*nw = malloc(sizeof(t_path));
@@ -49,6 +53,7 @@ t_path	*ft_lst_path_new(char *str)
 	struct stat	s;
 	if (stat(nw->name, &s) == 0)
 	{
+		nw->time = s.st_mtime;
 		if (S_ISDIR(s.st_mode))
 		{
 			DIR				*p_dir;
@@ -99,6 +104,8 @@ void	ft_lst_path_free(t_path *start)
 	}
 }
 
+//	###### FILE #####
+
 t_file	*ft_lst_file_new(char *name, char *dir)
 {
 	t_file	*nw = malloc(sizeof(t_file));
@@ -110,6 +117,7 @@ t_file	*ft_lst_file_new(char *name, char *dir)
 	struct stat	s;
 	if (stat(nw->path, &s) == 0)
 	{
+		nw->time = s.st_mtime;
 		if (S_ISREG(s.st_mode) && (s.st_mode & (S_IXUSR | S_IXGRP | S_IXOTH)))
 			nw->type = E_EXEC; // check if the bit is exec and a file
 		else if (S_ISREG(s.st_mode))

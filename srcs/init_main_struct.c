@@ -63,13 +63,69 @@ static void	ft_path_get(t_ls *ls)
 	}
 }
 
+static void ft_rearrange_order(t_ls *ls)
+{
+	t_path	*node = ls->path;
+	t_path	*file_head = NULL;
+	t_path	*file_node = NULL;
+	t_path	*folder_head = NULL;
+	t_path	*folder_node = NULL;
+	while (node != NULL)
+	{
+		if (node->folder == true)
+		{
+			if (folder_head == NULL)
+			{
+				folder_node = node;
+				folder_head = folder_node;
+			}
+			else
+			{
+				folder_node->next = node;
+				folder_node = folder_node->next;
+			}
+		}
+		else
+		{
+			if (file_head == NULL)
+			{
+				file_node = node;
+				file_head = file_node;
+			}
+			else
+			{
+				file_node->next = node;
+				file_node = file_node->next;
+			}
+		}
+		node = node->next;
+	}
+	if (file_node)
+		file_node->next = NULL;
+	if (folder_node)
+		folder_node->next = NULL;
+	ft_option_sort_alpha(&file_head);
+	ft_option_sort_alpha(&folder_head);
+	file_node = file_head;
+	while (file_node->next != NULL)
+		file_node = file_node->next;
+	if (file_node != NULL)
+		file_node->next = folder_head;
+
+	ls->path = (file_head != NULL) ? file_head : folder_head;
+}
+
 static void	ft_apply_option(t_ls *ls)
 {
 	if (ft_option_checker(ls->option, E_OPTION_CR))
 	{
-		ft_recursive(ls->path);
+		ft_apply_recursive(ls->path);
 		ls->recur = true;
 	}
+	if (ft_option_checker(ls->option, E_OPTION_T))
+		ft_apply_time(ls);
+	if (ft_option_checker(ls->option, E_OPTION_R))
+		(void) ls;
 }
 
 void	ft_init_main_struct(t_ls *ls, int ac, char **av)
@@ -78,6 +134,7 @@ void	ft_init_main_struct(t_ls *ls, int ac, char **av)
 	ft_token_check(ls);
 	ft_token_option_get(ls);
 	ft_path_get(ls);
+	ft_rearrange_order(ls);
 	ft_apply_option(ls);
 	//db_print_ls(ls);
 }
