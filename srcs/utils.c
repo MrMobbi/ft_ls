@@ -114,3 +114,25 @@ int	ft_str_cmp(char *str1, char *str2)
 	}
 	return ((int)(str1[i] - str2[i]));
 }
+
+char	*ft_str_join_path(char *start, char *file)
+{
+	char	*path = malloc(sizeof(char) * (ft_strlen(start) + \
+										   ft_strlen(file) + 2));
+	if (!path)
+		ft_error(D_ERR_MSG_MALLOC, E_ERR_MALLOC);
+	size_t	current = 0;
+	for (size_t i = 0; i < ft_strlen(start); i++)
+	{
+		path[current] = start[i];
+		current++;
+	}
+	path[current++] = '/';
+	for (size_t i = 0; i < ft_strlen(file); i++)
+	{
+		path[current] = file[i];
+		current++;
+	}
+	path[current] = '\0';
+	return (path);
+}

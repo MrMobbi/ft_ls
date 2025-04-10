@@ -18,6 +18,10 @@
 # include <stdbool.h>
 # include <stdarg.h>
 
+//	#############################
+//	####   DEFINE AND ENUM   ####
+//	#############################
+
 //	ERROR MSG
 # define D_ERR_MSG_MALLOC			"Malloc failled"
 # define D_ERR_MSG_UNRECO_OPTION	"ls: unrecognized option:"
@@ -35,7 +39,6 @@
 # define D_MAGENTA	"\033[35m"
 # define D_CYAN		"\033[36m"
 # define D_RESET	"\033[0m"
-
 
 // the C mean if letter is capital
 enum e_option {
@@ -64,13 +67,14 @@ enum e_file_type {
 	E_EXEC_HIDE = 13,
 };
 
-//	####################
-//	####	LIST	####
-//	####################
+//	##################
+//	####   LIST   ####
+//	##################
 
 typedef struct	s_ls {
 	int		return_status;
 	char	*option;
+	struct s_path	*path;
 }	t_ls;
 
 typedef struct s_token {
@@ -81,12 +85,24 @@ typedef struct s_token {
 
 typedef struct	s_path {
 	char	*name;
+	bool	folder;
+	int		error;
+	time_t	time;
+	struct s_file	*file;
 	struct s_path	*next;
 }	t_path;
 
-//	########################
-//	####	FUNCTION	####
-//	########################
+typedef struct	s_file {
+	char	*name;
+	char	*path;
+	int		type;
+	time_t	time;
+	struct s_file	*next;
+}	t_file;
+
+//	######################
+//	####   FUNCTION   ####
+//	######################
 
 //	### DEBUG ###
 void	db_print_token(t_token *ptr);
@@ -103,9 +119,17 @@ void	ft_extract_path_and_option(int ac, char **av, t_ls *ls);
 t_token	*ft_lst_token_new(char *str);
 void	ft_lst_token_add(t_token *start, t_token *nw);
 void	ft_lst_token_free(t_token *ptr);
+t_path	*ft_lst_path_new(char *str);
+void	ft_lst_path_add(t_path *ptr, t_path *nw);
+t_file	*ft_lst_file_new(char *name, char *dir);
+void	ft_lst_file_add(t_file *start, t_file *nw);
+void	ft_lst_file_free(t_file *start);
 
 //	### OPTION ###
 char	*ft_option_get(t_token *ptr);
+
+//	### PATH ###
+t_path	*ft_path_get(t_token *ptr);
 
 //	### PRINT ###
 void	ft_print_help(void);
@@ -122,5 +146,6 @@ size_t	ft_putnbr_size_t(size_t n);
 size_t	ft_strlen(char *str);
 char	*ft_str_dup(char *str);
 int		ft_str_cmp(char *str1, char *str2);
+char	*ft_str_join_path(char *start, char *file);
 
 #endif

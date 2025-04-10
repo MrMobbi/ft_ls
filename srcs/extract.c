@@ -43,6 +43,7 @@ static void	ft_token_check_path(t_token *ptr)
 static void	ft_get_path_and_option(t_ls *ls, t_token *token)
 {
 	ls->option = ft_option_get(token);
+	//ls->path = ft_path_get(token); // need to be finished
 }
 
 /* Manage how to endle the token */

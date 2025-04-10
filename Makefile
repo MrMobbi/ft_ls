@@ -18,6 +18,7 @@ FILES		= main.c \
 			  extract.c \
 			  list.c \
 			  option.c \
+			  path.c \
 			  print.c \
 			  printf.c \
 			  utils.c \
