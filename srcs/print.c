@@ -19,19 +19,29 @@ static void	ft_print_folder(t_path *path, int count)
 	}
 }
 
+void	ft_print_error(int error, char *str)
+{
+	if (error == E_ERR_ACCESS)
+		ft_error_access(str);
+	else if (error == E_ERR_EXIST)
+		ft_error_exist(str);
+}
+
 void	ft_print(t_ls ls)
 {
 	t_path	*path = ls.path;
 	int		count = 0;
 	while (path != NULL)
 	{
-		if (path->folder == false)
+		if (path->error != 0)
+			ft_print_error(path->error, path->name);
+		else if (path->folder == false)
 		{
 			printf("%s", path->name);
 			if (path->next != NULL && path->next->folder == true)
 				printf("\n\n");
 			else if (path->next != NULL && isatty(STDOUT_FILENO))
-				printf("  ");
+				printf("\t");
 			else if (path->next != NULL && isatty(STDOUT_FILENO))
 				printf("\n");
 			count++;

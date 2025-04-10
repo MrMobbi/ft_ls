@@ -47,6 +47,8 @@ enum e_option {
 enum e_error{
 	E_ERR_MALLOC = 1,
 	E_ERR_EXIT = 2,
+	E_ERR_ACCESS = 3,
+	E_ERR_EXIST = 4,
 };
 
 enum e_file_type {
@@ -81,6 +83,7 @@ typedef struct s_token {
 typedef struct s_path {
 	char	*name;
 	bool	folder;
+	int		error;
 	time_t	time;
 	struct s_file	*file; // <- if folder this is the chain list to files in it
 	struct s_path	*next;
@@ -108,6 +111,7 @@ void	ft_lst_path_add_here(t_path *here, t_path *nw);
 void	ft_lst_path_free(t_path *start);
 t_file	*ft_lst_file_new(char *name, char *dir);
 void	ft_lst_file_add(t_file *start, t_file *nw);
+void	ft_lst_file_free(t_file *start);
 
 // option_utils
 void	ft_option_check_dash(char *str);
@@ -128,11 +132,12 @@ char	*ft_str_join_path(char *start, char *file);
 int		ft_str_cmp(char *str1, char *str2);
 int		ft_str_cmp_case(char *str1, char *str2);
 
-// exit
+// error
 void	ft_error(char *msg, int rt_error);
 void	ft_error_dash(char *unknow);
 void	ft_error_option(char c);
-void	ft_error_path(char *file);
+void	ft_error_exist(char *str);
+void	ft_error_access(char *str);
 
 // print
 void	ft_print(t_ls ls);

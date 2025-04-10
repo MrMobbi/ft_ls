@@ -21,8 +21,12 @@ void	ft_error_option(char c)
 	exit(2);
 }
 
-void	ft_error_path(char *file)
+void	ft_error_exist(char *str)
 {
-	printf("ls: cannot acces '%s': No such file or directory\n", file);
-	exit(2);
+	printf("ls: cannot acces '%s': No such file or directory\n", str);
+}
+
+void	ft_error_access(char *str)
+{
+	printf("ls: cannot open directory '%s': Permission denied\n", str);
 }

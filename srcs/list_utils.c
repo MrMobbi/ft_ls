@@ -48,33 +48,43 @@ t_path	*ft_lst_path_new(char *str)
 		ft_error(D_ERR_MSG_MALLOC, E_ERR_MALLOC);
 	nw->name = ft_str_dup(str);
 	nw->folder = false;
+	nw->error = false;
 	nw->next = NULL;
 	nw->file = NULL;
 	struct stat	s;
-	if (stat(nw->name, &s) == 0)
+	if (stat(nw->name, &s) != 0)
 	{
-		nw->time = s.st_mtime;
-		if (S_ISDIR(s.st_mode))
+		if (errno == ENOENT)
+			nw->error = E_ERR_EXIST;
+		else
+			ft_error(str, errno);
+		return (nw);
+	}
+	nw->time = s.st_mtime;
+	if (S_ISDIR(s.st_mode))
+	{
+		DIR				*p_dir;
+		struct dirent	*p_dirent;
+		nw->folder = true;
+		p_dir = opendir(nw->name); //DIR
+		if (p_dir == NULL)
 		{
-			DIR				*p_dir;
-			struct dirent	*p_dirent;
-			p_dir = opendir(nw->name); //DIR
-			nw->folder = true;
-			if (p_dir == NULL)
-				ft_error("opendir failled\n", 2); // todo proper message error
+			if (errno == EACCES)
+				nw->error = E_ERR_ACCESS;
+		}
+		else 
+		{
 			while ((p_dirent = readdir(p_dir)) != NULL)
 			{
+				t_file	*new_file = ft_lst_file_new(p_dirent->d_name, nw->name);
 				if (nw->file == NULL)
-					nw->file = ft_lst_file_new(p_dirent->d_name, nw->name);
+					nw->file = new_file;
 				else
-					ft_lst_file_add(nw->file, ft_lst_file_new(p_dirent->d_name, nw->name));
+					ft_lst_file_add(nw->file, new_file);
 			}
 			closedir(p_dir);
 		}
 	}
-	else
-		ft_error_path(str);
-	
 	return (nw);
 }
 
@@ -99,6 +109,8 @@ void	ft_lst_path_free(t_path *start)
 	{
 		node = start->next;
 		free(start->name);
+		if (start->file != NULL)
+			ft_lst_file_free(start->file);
 		free(start);
 		start = node;
 	}
@@ -151,4 +163,17 @@ void	ft_lst_file_add(t_file *start, t_file *nw)
 	while (node->next != NULL)
 		node = node->next;
 	node->next = nw;
+}
+
+void	ft_lst_file_free(t_file *start)
+{
+	t_file	*node;
+	while (start != NULL)
+	{
+		node = start->next;
+		free(start->name);
+		free(start->path);
+		free(start);
+		start = node;
+	}
 }
