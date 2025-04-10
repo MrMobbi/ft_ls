@@ -13,14 +13,14 @@ INC_PATH	= -I incl
 
 	### SOURCES FILES ###
 FILES		= main.c \
-			  list_utils.c \
-			  option_apply.c \
-			  option_utils.c \
-			  utils.c \
-			  init_main_struct.c \
+			  debug.c \
 			  error.c \
+			  extract.c \
+			  list.c \
+			  option.c \
 			  print.c \
-			  debug.c
+			  printf.c \
+			  utils.c \
 
 			  # OBJECT FILES
 

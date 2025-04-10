@@ -1,7 +1,70 @@
 
 #include "../incl/ft_ls.h"
 
-/* Print help message on how to use 'ls' */
+static void	ft_print_folder(t_path *path, int count)
+{
+	t_file	*file = path->file;
+
+	if (count != 0)
+		printf("%s:\n", path->name);
+	while (file != NULL)
+	{
+		if (file->type < 10)
+			printf("%s", file->name);
+		if (file->next != NULL && file->type < 10 && isatty(STDOUT_FILENO))
+			printf("  ");
+		else if (file->next != NULL && file->type < 10 && !isatty(STDOUT_FILENO))
+			printf("\n");
+		file = file->next;
+	}
+}
+
+void	ft_print_error(int error, char *str)
+{
+	if (error == E_ERR_ACCESS)
+		ft_error_access(str);
+	else if (error == E_ERR_EXIST)
+		ft_error_exist(str);
+}
+
+void	ft_print(t_ls ls)
+{
+	t_path	*path = ls.path;
+	int		count = 0;
+	while (path != NULL)
+	{
+		if (path->error != 0)
+		{
+			ft_print_error(path->error, path->name);
+			count++;
+		}
+		else
+		{
+			if (path->folder == false)
+			{
+				printf("%s", path->name);
+				if (path->next != NULL && path->next->folder == true)
+					printf("\n\n");
+				else if (path->next != NULL && isatty(STDOUT_FILENO))
+					printf("\t");
+				else if (path->next != NULL && isatty(STDOUT_FILENO))
+					printf("\n");
+				count++;
+			}
+			else if (count > 1)
+				ft_print_folder(path, count);
+			else if (path->next!= NULL)
+				ft_print_folder(path, ++count);
+			else
+				ft_print_folder(path, count++);
+			if (path->next != NULL)
+				printf("\n\n");
+		}
+		path = path->next;
+	}
+	printf("\n");
+}
+
 void	ft_print_help(void)
 {
 	printf("Usage: ls [OPTION]... [FILE]...\n"\

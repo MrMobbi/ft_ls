@@ -1,4 +1,5 @@
 
+
 #ifndef FT_LS_H
 # define FT_LS_H
 
@@ -15,6 +16,7 @@
 # include <errno.h>
 # include <string.h>
 # include <stdbool.h>
+# include <stdarg.h>
 
 //	ERROR MSG
 # define D_ERR_MSG_MALLOC			"Malloc failled"
@@ -62,91 +64,63 @@ enum e_file_type {
 	E_EXEC_HIDE = 13,
 };
 
-//	main data struct
-typedef struct s_ls {
+//	####################
+//	####	LIST	####
+//	####################
+
+typedef struct	s_ls {
+	int		return_status;
 	char	*option;
-	int		nb_to_print;
-	bool	recur;
-	struct s_token	*token;
-	struct s_path	*path;
 }	t_ls;
 
-// tokenizing the args
 typedef struct s_token {
 	char	*name;
 	bool	option;
-	bool	path;
 	struct s_token	*next;
 }	t_token;
 
-// path to the file or the directory
-typedef struct s_path {
+typedef struct	s_path {
 	char	*name;
-	bool	folder;
-	int		error;
-	time_t	time;
-	struct s_file	*file; // <- if folder this is the chain list to files in it
 	struct s_path	*next;
 }	t_path;
 
-// files that are in the directory
-typedef struct s_file {
-	char	*name;
-	char	*path;
-	int		type;
-	time_t	time;
-	struct s_file	*next;
-}	t_file;
+//	########################
+//	####	FUNCTION	####
+//	########################
 
-// init_main_struct
-void	ft_init_main_struct(t_ls *ls, int ac, char **av);
+//	### DEBUG ###
+void	db_print_token(t_token *ptr);
 
-// utils_list
-t_token	*ft_lst_token_new(char *str);
-void	ft_lst_token_add(t_token *start, t_token *nw);
-void	ft_lst_token_free(t_token *start);
-t_path	*ft_lst_path_new(char *str);
-void	ft_lst_path_add(t_path *start, t_path *nw);
-void	ft_lst_path_add_here(t_path *here, t_path *nw);
-void	ft_lst_path_free(t_path *start);
-t_file	*ft_lst_file_new(char *name, char *dir);
-void	ft_lst_file_add(t_file *start, t_file *nw);
-void	ft_lst_file_free(t_file *start);
-
-// option_utils
-void	ft_option_check_dash(char *str);
-char	*ft_option_add(char *option, char *add);
-bool	ft_option_checker(char *str, char c);
-void	ft_option_path_sort_alpha(t_path **head);
-void	ft_option_file_sort_alpha(t_file **head);
-
-// option_apply
-void	ft_apply_recursive(t_path	*start);
-void	ft_apply_time(t_ls *ls);
-
-// utils
-size_t	ft_strlen(char *str);
-char	*ft_str_dup(char *str);
-char	*ft_str_join(char *str1, char *str2);
-char	*ft_str_join_path(char *start, char *file);
-int		ft_str_cmp(char *str1, char *str2);
-int		ft_str_cmp_case(char *str1, char *str2);
-
-// error
+//	### ERROR ###
 void	ft_error(char *msg, int rt_error);
 void	ft_error_dash(char *unknow);
 void	ft_error_option(char c);
-void	ft_error_exist(char *str);
-void	ft_error_access(char *str);
 
-// print
-void	ft_print(t_ls ls);
+//	### EXTRACT ###
+void	ft_extract_path_and_option(int ac, char **av, t_ls *ls);
+
+//	### LIST ###
+t_token	*ft_lst_token_new(char *str);
+void	ft_lst_token_add(t_token *start, t_token *nw);
+void	ft_lst_token_free(t_token *ptr);
+
+//	### OPTION ###
+char	*ft_option_get(t_token *ptr);
+
+//	### PRINT ###
 void	ft_print_help(void);
 
-// debug
-void	db_print_ls(t_ls *ls);
-void	db_print_file(t_file *file);
-void	db_print_path(t_path *path);
-void	db_print_token(t_token *toke);
+//	### PRINTF ###
+int		ft_printf(const char *str, ...);
+
+//	### UTILS ###
+int		ft_putchar(char c);
+int		ft_putstr(char *str);
+int		ft_put_unsinbr(unsigned int n);
+int		ft_putnbr(int n);
+size_t	ft_putnbr_size_t(size_t n);
+size_t	ft_strlen(char *str);
+char	*ft_str_dup(char *str);
+int		ft_str_cmp(char *str1, char *str2);
 
 #endif

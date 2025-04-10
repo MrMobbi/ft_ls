@@ -127,22 +127,12 @@ t_file	*ft_lst_file_new(char *name, char *dir)
 	nw->path = ft_str_join_path(dir, name);
 	nw->next = NULL;
 	struct stat	s;
-	if (stat(nw->path, &s) == 0)
+	if (lstat(nw->path, &s) == 0)
 	{
 		nw->time = s.st_mtime;
-		if (S_ISREG(s.st_mode) && (s.st_mode & (S_IXUSR | S_IXGRP | S_IXOTH)))
-			nw->type = E_EXEC; // check if the bit is exec and a file
-		else if (S_ISREG(s.st_mode))
-			nw->type = E_FILE;
-		else if (S_ISDIR(s.st_mode)) // check the bit from a macro
+		if (S_ISDIR(s.st_mode)) // directory check
 			nw->type = E_DIR;
-		else
-		{
-			printf("here\n");
-			printf("%s | %d", strerror(errno), errno);;
-			exit(3); // todo proper error handling
-		}
-		if (nw->name[0] == '.')
+		if (nw->name[0] == '.') // hide file check
 			nw->type += 10;
 		if (!ft_str_cmp(nw->name, "."))
 			nw->type = E_CURRENT;
