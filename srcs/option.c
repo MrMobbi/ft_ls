@@ -101,3 +101,42 @@ char	*ft_option_get(t_token *ptr)
 	}
 	return (option);
 }
+
+void	ft_option_file_sort_alpha(t_file **head)
+{
+	bool	swapped;
+	t_file	*ptr;
+	t_file	*prev;
+	t_file	*tmp;
+
+	if (head == NULL || *head == NULL)
+		return ;
+
+	do {
+		swapped = false;
+		ptr = *head;
+		prev = NULL;
+
+		while (ptr != NULL && ptr->next != NULL)
+		{
+			if (ft_str_cmp_case(ptr->name, ptr->next->name) > 0)
+			{
+				tmp = ptr->next;
+				ptr->next = tmp->next;
+				tmp->next = ptr;
+				if (prev == NULL)
+					*head = tmp;
+				else
+					prev->next = tmp;
+				swapped = true;
+				prev = tmp;
+			}
+			else
+			{
+				prev = ptr;
+				ptr = ptr->next;
+			}
+		}
+	}
+	while (swapped);
+}

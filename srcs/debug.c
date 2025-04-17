@@ -42,14 +42,14 @@ void	db_print_path(t_path *ptr)
 	ft_printf("### PATH ###\n");
 	while (ptr != NULL)
 	{
-		ft_printf("[%s]\n", ptr->name);
+		ft_printf("[%s] ", ptr->name);
 		if (ptr->folder == true)
 		{
 			ft_printf("PATH is a folder:\n");
 			db_print_file(ptr->file);
 		}
 		else
-			ft_printf("PATH is a file");	
+			ft_printf("PATH is a file \n");	
 		ptr = ptr->next;
 	}
 }

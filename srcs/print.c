@@ -1,6 +1,9 @@
 
 #include "../incl/ft_ls.h"
 
+/* Print the output in the good format */
+void	ft_print(t_ls *ls);
+
 /* Print help message on how to use 'ls' */
 void	ft_print_help(void)
 {
