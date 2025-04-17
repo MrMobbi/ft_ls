@@ -106,6 +106,8 @@ typedef struct	s_file {
 
 //	### DEBUG ###
 void	db_print_token(t_token *ptr);
+void	db_print_path(t_path *ptr);
+void	db_print_file(t_file *ptr);
 
 //	### ERROR ###
 void	ft_error(char *msg, int rt_error);
@@ -117,13 +119,14 @@ void	ft_extract_path_and_option(int ac, char **av, t_ls *ls);
 
 //	### LIST ###
 t_token	*ft_lst_token_new(char *str);
-void	ft_lst_token_add(t_token *start, t_token *nw);
+void	ft_lst_token_add(t_token *ptr, t_token *nw);
 void	ft_lst_token_free(t_token *ptr);
 t_path	*ft_lst_path_new(char *str);
 void	ft_lst_path_add(t_path *ptr, t_path *nw);
+void	ft_lst_path_free(t_path *ptr);
 t_file	*ft_lst_file_new(char *name, char *dir);
-void	ft_lst_file_add(t_file *start, t_file *nw);
-void	ft_lst_file_free(t_file *start);
+void	ft_lst_file_add(t_file *ptr, t_file *nw);
+void	ft_lst_file_free(t_file *ptr);
 
 //	### OPTION ###
 char	*ft_option_get(t_token *ptr);

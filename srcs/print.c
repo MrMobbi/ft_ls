@@ -4,7 +4,7 @@
 /* Print help message on how to use 'ls' */
 void	ft_print_help(void)
 {
-	printf("Usage: ls [OPTION]... [FILE]...\n"\
+	ft_printf("Usage: ls [OPTION]... [FILE]...\n"\
 			"List information about the FILEs (the current directory by default).\n"\
 			"Sort entries alphabetically if -tr is specified.\n\n"\
 			"Mandatory arguments to long options are mandatory for short options too.\n"\

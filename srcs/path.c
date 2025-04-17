@@ -5,7 +5,7 @@
  * path given by the prompt */
 t_path	*ft_path_get(t_token *ptr)
 {
-	t_path	*path;
+	t_path	*path = NULL;
 	while (ptr != NULL)
 	{
 		if (!ptr->option)
