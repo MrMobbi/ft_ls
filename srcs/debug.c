@@ -22,12 +22,17 @@ void	db_print_file(t_file *ptr)
 	while (ptr != NULL)
 	{
 		ft_printf("[%s] ", ptr->name);
-		if (ptr->type == E_FILE)
-			ft_printf("Is a file\n");
-		else if (ptr->type == E_DIR)
+		if (ptr->type == E_FOLDER)
 			ft_printf("Is a folder\n");
-		else
-			ft_printf("Is other \n");
+		else if (ptr->type == E_HIDE)
+			ft_printf("Is a hiden file\n");
+		else if (ptr->type == E_OTHER)
+			ft_printf("Is file or executable\n");
+		else if (ptr->type == E_CURRENT)
+			ft_printf("Is current\n");
+		else if (ptr->type == E_PREVIOUS)
+			ft_printf("Is previous\n");
+
 		ptr = ptr->next;
 	}
 }

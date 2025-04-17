@@ -54,6 +54,7 @@ t_path	*ft_lst_path_new(char *str)
 	nw->name = ft_str_dup(str);
 	nw->folder = false;
 	nw->next = NULL;
+	nw->file = NULL;
 
 	struct stat	st;
 	if (lstat(nw->name, &st) != 0)
@@ -129,13 +130,15 @@ t_file	*ft_lst_file_new(char *name, char *dir)
 	{
 		nw->time = s.st_mtime;
 		if (S_ISDIR(s.st_mode)) // directory check
-			nw->type = E_DIR;
+			nw->type = E_FOLDER;
 		if (nw->name[0] == '.') // hide file check
-			nw->type += 10;
+			nw->type = E_HIDE;
 		if (!ft_str_cmp(nw->name, "."))
 			nw->type = E_CURRENT;
 		else if (!ft_str_cmp(nw->name, ".."))
 			nw->type = E_PREVIOUS;
+		else
+			nw->type = E_OTHER;
 	}
 	else
 	{

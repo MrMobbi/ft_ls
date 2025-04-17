@@ -10,11 +10,11 @@ t_path	*ft_path_get(t_token *ptr)
 	{
 		if (!ptr->option)
 		{
-			t_path	*nw = ft_lst_path_new(ptr->name);
+			t_path	*new_path = ft_lst_path_new(ptr->name);
 			if (path == NULL)
-				path = nw;
+				path = new_path;
 			else
-				ft_lst_path_add(path, nw);
+				ft_lst_path_add(path, new_path);
 		}
 		ptr = ptr->next;
 	}

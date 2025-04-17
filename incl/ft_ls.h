@@ -57,14 +57,11 @@ enum e_error{
 };
 
 enum e_file_type {
-	E_FILE = 1,
-	E_DIR = 2,
-	E_EXEC = 3,
-	E_CURRENT = 14,
-	E_PREVIOUS = 15,
-	E_FILE_HIDE = 11,
-	E_DIR_HIDE = 12,
-	E_EXEC_HIDE = 13,
+	E_FOLDER = 1,
+	E_HIDE = 2,
+	E_OTHER = 3,
+	E_CURRENT = 4,
+	E_PREVIOUS = 5,
 };
 
 //	##################
