@@ -140,3 +140,59 @@ void	ft_option_file_sort_alpha(t_file **head)
 	}
 	while (swapped);
 }
+
+/* this function rearange order of the token in an alphabetic order */
+void ft_rearrange_alpha(t_ls *ls)
+{
+	t_path	*node = ls->path;
+	t_path	*file_head = NULL;
+	t_path	*file_node = NULL;
+	t_path	*folder_head = NULL;
+	t_path	*folder_node = NULL;
+	while (node != NULL)
+	{
+		if (node->folder == true)
+		{
+			ft_option_file_sort_alpha(&node->file);
+			if (folder_head == NULL)
+			{
+				folder_node = node;
+				folder_head = folder_node;
+			}
+			else
+			{
+				folder_node->next = node;
+				folder_node = folder_node->next;
+			}
+		}
+		else
+		{
+			if (file_head == NULL)
+			{
+				file_node = node;
+				file_head = file_node;
+			}
+			else
+			{
+				file_node->next = node;
+				file_node = file_node->next;
+			}
+		}
+		node = node->next;
+	}
+	if (file_node)
+		file_node->next = NULL;
+	if (folder_node)
+		folder_node->next = NULL;
+	ft_path_sort_alpha(&file_head);
+	ft_path_sort_alpha(&folder_head);
+	if (file_node != NULL)
+	{
+		file_node = file_head;
+		while (file_node->next != NULL)
+			file_node = file_node->next;
+		if (file_node != NULL)
+			file_node->next = folder_head;
+	}
+	ls->path = (file_head != NULL) ? file_head : folder_head;
+}

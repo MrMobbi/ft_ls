@@ -71,6 +71,7 @@ enum e_file_type {
 typedef struct	s_ls {
 	int		return_status;
 	char	*option;
+	bool	multiple;
 	struct s_path	*path;
 }	t_ls;
 
@@ -128,6 +129,7 @@ void	ft_lst_file_free(t_file *ptr);
 //	### OPTION ###
 char	*ft_option_get(t_token *ptr);
 void	ft_option_file_sort_alpha(t_file **head);
+void	ft_rearrange_alpha(t_ls *ls);
 
 //	### PATH ###
 t_path	*ft_path_get(t_token *ptr);

@@ -2,7 +2,7 @@
 #include "../incl/ft_ls.h"
 
 /* Tokenizing the prompt */
-static	t_token	*ft_get_token(int ac, char **av)
+static t_token	*ft_get_token(int ac, char **av)
 {
 	t_token	*token = NULL;
 	if (ac < 2)
@@ -46,60 +46,33 @@ static void	ft_get_path_and_option(t_ls *ls, t_token *token)
 	ls->path = ft_path_get(token);
 }
 
-static void ft_rearrange_order(t_ls *ls)
+/* Manage the aplication of the option */
+static void	ft_apply_option(t_ls *ls)
+{
+	ft_rearrange_alpha(ls);
+}
+
+/* Will check how to print if there is multiple folder top print */
+static void	ft_is_multiple(t_ls *ls)
 {
 	t_path	*node = ls->path;
-	t_path	*file_head = NULL;
-	t_path	*file_node = NULL;
-	t_path	*folder_head = NULL;
-	t_path	*folder_node = NULL;
+	int		count = 0;
+	bool	file = false;
 	while (node != NULL)
 	{
+		if (node->folder == false)
+			file = true;
+		if (file == true && count == 0)
+			count++;
 		if (node->folder == true)
-		{
-			ft_option_file_sort_alpha(&node->file);
-			if (folder_head == NULL)
-			{
-				folder_node = node;
-				folder_head = folder_node;
-			}
-			else
-			{
-				folder_node->next = node;
-				folder_node = folder_node->next;
-			}
-		}
-		else
-		{
-			if (file_head == NULL)
-			{
-				file_node = node;
-				file_head = file_node;
-			}
-			else
-			{
-				file_node->next = node;
-				file_node = file_node->next;
-			}
-		}
+			count++;
 		node = node->next;
+		if (count > 1)
+		{
+			ls->multiple = true;
+			break;
+		}
 	}
-	if (file_node)
-		file_node->next = NULL;
-	if (folder_node)
-		folder_node->next = NULL;
-	ft_path_sort_alpha(&file_head);
-	ft_path_sort_alpha(&folder_head);
-	if (file_node != NULL)
-	{
-		file_node = file_head;
-		while (file_node->next != NULL)
-			file_node = file_node->next;
-		if (file_node != NULL)
-			file_node->next = folder_head;
-	}
-
-	ls->path = (file_head != NULL) ? file_head : folder_head;
 }
 
 /* Manage how to endle the token */
@@ -109,9 +82,14 @@ void	ft_extract_path_and_option(int ac, char **av, t_ls *ls)
 	token = ft_get_token(ac, av);
 	ft_token_check_path(token);
 	ft_get_path_and_option(ls, token);
-	ft_rearrange_order(ls);
+	ft_apply_option(ls);
+	ft_is_multiple(ls);
 
 	ft_printf("ls->option [%s]\n", ls->option);
+	if (ls->multiple == true)
+		ft_printf("multiple print\n");
+	else
+		ft_printf("single print\n");
 	db_print_token(token);
 	db_print_path(ls->path);
 	ft_lst_token_free(token);

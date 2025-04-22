@@ -1,8 +1,22 @@
 
 #include "../incl/ft_ls.h"
 
+static void	ft_print_file(t_file *ptr)
+{
+	while (ptr != NULL)
+	{
+		ft_printf("%s", ptr->name);
+		if (ptr->next != NULL)
+			ft_printf("\t");
+		ptr = ptr->next;
+	}
+}
+
 /* Print the output in the good format */
-void	ft_print(t_ls *ls);
+void	ft_print(t_ls *ls)
+{
+	(void) ls;
+}
 
 /* Print help message on how to use 'ls' */
 void	ft_print_help(void)
