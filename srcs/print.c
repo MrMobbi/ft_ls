@@ -1,21 +1,39 @@
 
 #include "../incl/ft_ls.h"
 
+static void	ft_print_path_name(t_path *path, bool multiple)
+{
+	if (path->folder != true || multiple == true)
+		ft_printf("%s", path->name);
+	if (path->folder != true && path->next != NULL && path->next->folder != true)
+		ft_printf("  ");
+	else if (path->folder == true && multiple == true)
+		ft_printf(":\n");
+}
+
 static void	ft_print_file(t_file *ptr)
 {
 	while (ptr != NULL)
 	{
 		ft_printf("%s", ptr->name);
 		if (ptr->next != NULL)
-			ft_printf("\t");
+			ft_printf("  ");
 		ptr = ptr->next;
 	}
+	ft_printf("\n");
 }
 
 /* Print the output in the good format */
 void	ft_print(t_ls *ls)
 {
-	(void) ls;
+	t_path	*path = ls->path;
+	while (path != NULL)
+	{
+		ft_print_path_name(path, ls->multiple);
+		if (path->folder == true)
+			ft_print_file(path->file);
+		path = path->next;
+	}
 }
 
 /* Print help message on how to use 'ls' */

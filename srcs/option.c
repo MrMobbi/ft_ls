@@ -102,6 +102,7 @@ char	*ft_option_get(t_token *ptr)
 	return (option);
 }
 
+/* */
 void	ft_option_file_sort_alpha(t_file **head)
 {
 	bool	swapped;
@@ -119,7 +120,7 @@ void	ft_option_file_sort_alpha(t_file **head)
 
 		while (ptr != NULL && ptr->next != NULL)
 		{
-			if (ft_str_cmp_case(ptr->name, ptr->next->name) > 0)
+			if (ft_strcmp_special(ptr->name, ptr->next->name) > 0)
 			{
 				tmp = ptr->next;
 				ptr->next = tmp->next;

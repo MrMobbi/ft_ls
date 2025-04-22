@@ -144,11 +144,25 @@ static char	to_lower(char c)
 	return (c);
 }
 
-int	ft_str_cmp_case(char *str1, char *str2)
+int	ft_strcmp_special(char *str1, char *str2)
 {
-	int	i = 0;
+	int		i = 0;
 	char	c1;
 	char	c2;
+	while (*str1 != '\0')
+	{
+		if (*str1 == '.')
+			str1++;
+		else
+			break;
+	}
+	while (*str2 != '\0')
+	{
+		if (*str2 == '.')
+			str2++;
+		else
+			break;
+	}
 	while (str1[i] != '\0')
 	{
 		c1 = to_lower(str1[i]);

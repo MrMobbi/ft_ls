@@ -136,6 +136,7 @@ t_path	*ft_path_get(t_token *ptr);
 void	ft_path_sort_alpha(t_path **head);
 
 //	### PRINT ###
+void	ft_print(t_ls *ls);
 void	ft_print_help(void);
 
 //	### PRINTF ###
@@ -151,6 +152,6 @@ size_t	ft_strlen(char *str);
 char	*ft_str_dup(char *str);
 int		ft_str_cmp(char *str1, char *str2);
 char	*ft_str_join_path(char *start, char *file);
-int		ft_str_cmp_case(char *str1, char *str2);
+int		ft_strcmp_special(char *str1, char *str2);
 
 #endif

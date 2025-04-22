@@ -93,4 +93,6 @@ void	ft_extract_path_and_option(int ac, char **av, t_ls *ls)
 	db_print_token(token);
 	db_print_path(ls->path);
 	ft_lst_token_free(token);
+
+	ft_print(ls);
 }
