@@ -175,3 +175,16 @@ int	ft_strcmp_special(char *str1, char *str2)
 	c2 = to_lower(str2[i]);
 	return ((int)(c1 - c2));
 }
+
+bool	ft_is_option(char c, char *option)
+{
+	if (option == NULL)
+		return false;
+	while (*option != '\0')
+	{
+		if (*option == c)
+			return true;
+		option++;
+	}
+	return false;
+}

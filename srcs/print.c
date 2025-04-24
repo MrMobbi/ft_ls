@@ -23,8 +23,18 @@ static void	ft_print_file(t_file *ptr)
 	ft_printf("\n");
 }
 
-/* Print the output in the good format */
-void	ft_print(t_ls *ls)
+/* Print the output in the good format if recursive */
+static void	ft_print_recursice(t_ls *ls)
+{
+	t_path	*node = ls->path;
+	while (node != NULL)
+	{
+		// need to find a loop to go throug each folder and print them with the option	
+	}
+}
+
+/* Print the output in the good format if not recursive */
+void	ft_print_not_recursive(t_ls *ls)
 {
 	t_path	*path = ls->path;
 	while (path != NULL)
@@ -34,6 +44,14 @@ void	ft_print(t_ls *ls)
 			ft_print_file(path->file);
 		path = path->next;
 	}
+}
+
+void	ft_print(t_ls *ls)
+{
+	if (ls->rec == true)
+		ft_print_recursice(ls);
+	else
+		ft_print_not_recursive(ls);
 }
 
 /* Print help message on how to use 'ls' */

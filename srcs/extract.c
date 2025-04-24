@@ -49,6 +49,7 @@ static void	ft_get_path_and_option(t_ls *ls, t_token *token)
 /* Manage the aplication of the option */
 static void	ft_apply_option(t_ls *ls)
 {
+	ls->rec = ft_is_option(E_OPTION_CR, ls->option);
 	ft_rearrange_alpha(ls);
 }
 
@@ -85,13 +86,8 @@ void	ft_extract_path_and_option(int ac, char **av, t_ls *ls)
 	ft_apply_option(ls);
 	ft_is_multiple(ls);
 
-	ft_printf("ls->option [%s]\n", ls->option);
-	if (ls->multiple == true)
-		ft_printf("multiple print\n");
-	else
-		ft_printf("single print\n");
 	db_print_token(token);
-	db_print_path(ls->path);
+	db_ls(ls);
 	ft_lst_token_free(token);
 
 	ft_print(ls);

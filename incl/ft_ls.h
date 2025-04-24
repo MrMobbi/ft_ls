@@ -71,6 +71,7 @@ enum e_file_type {
 typedef struct	s_ls {
 	int		return_status;
 	char	*option;
+	bool	rec;
 	bool	multiple;
 	struct s_path	*path;
 }	t_ls;
@@ -103,6 +104,7 @@ typedef struct	s_file {
 //	######################
 
 //	### DEBUG ###
+void	db_ls(t_ls *ls);
 void	db_print_token(t_token *ptr);
 void	db_print_path(t_path *ptr);
 void	db_print_file(t_file *ptr);
@@ -153,5 +155,6 @@ char	*ft_str_dup(char *str);
 int		ft_str_cmp(char *str1, char *str2);
 char	*ft_str_join_path(char *start, char *file);
 int		ft_strcmp_special(char *str1, char *str2);
+bool	ft_is_option(char c, char *option);
 
 #endif

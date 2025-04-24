@@ -1,6 +1,20 @@
 
 #include "../incl/ft_ls.h"
 
+void	db_ls(t_ls *ls)
+{
+	ft_printf("ls->option [%s]\n", ls->option);
+	if (ls->multiple == true)
+		ft_printf("multiple print\n");
+	else
+		ft_printf("single print\n");
+	if (ls->rec == true)
+		ft_printf("is recursive\n");
+	else
+		ft_printf("is not recursive\n");
+	db_print_path(ls->path);
+}
+
 void	db_print_token(t_token *ptr)
 {
 	ft_printf("### TOKEN ###\n");
