@@ -131,14 +131,14 @@ t_file	*ft_lst_file_new(char *name, char *dir)
 		nw->time = s.st_mtime;
 		if (S_ISDIR(s.st_mode)) // directory check
 			nw->type = E_FOLDER;
+		else
+			nw->type = E_OTHER;
 		if (nw->name[0] == '.') // hide file check
 			nw->type = E_HIDE;
 		if (!ft_str_cmp(nw->name, "."))
 			nw->type = E_CURRENT;
 		else if (!ft_str_cmp(nw->name, ".."))
 			nw->type = E_PREVIOUS;
-		else
-			nw->type = E_OTHER;
 	}
 	else
 	{

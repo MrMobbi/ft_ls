@@ -24,34 +24,40 @@ static void	ft_print_file(t_file *ptr)
 }
 
 /* Print the output in the good format if recursive */
-static void	ft_print_recursice(t_ls *ls)
+static void	ft_print_recursice(t_path *path)
 {
-	t_path	*node = ls->path;
-	while (node != NULL)
+	ft_print_path_name(path, true);
+	ft_print_file(path->file);
+	t_file	*ptr = path->file;
+	while (ptr != NULL)
 	{
-		// need to find a loop to go throug each folder and print them with the option	
-	}
-}
-
-/* Print the output in the good format if not recursive */
-void	ft_print_not_recursive(t_ls *ls)
-{
-	t_path	*path = ls->path;
-	while (path != NULL)
-	{
-		ft_print_path_name(path, ls->multiple);
-		if (path->folder == true)
-			ft_print_file(path->file);
-		path = path->next;
+		if (ptr->type == E_FOLDER)
+		{
+			char	*path_name = ft_str_join_path(path->name, ptr->name);
+			t_path	*rec = ft_lst_path_new(path_name);
+			ft_option_file_sort_alpha(&rec->file);
+			ft_print_recursice(rec);
+			free(path_name);
+			free(rec);
+		}
+		ptr = ptr->next;
 	}
 }
 
 void	ft_print(t_ls *ls)
 {
-	if (ls->rec == true)
-		ft_print_recursice(ls);
-	else
-		ft_print_not_recursive(ls);
+	t_path	*path = ls->path;
+	while (path != NULL)
+	{
+		if (ls->rec == true)
+			ft_print_recursice(path);
+		else if (path->folder == true)
+		{
+			ft_print_path_name(path, ls->multiple);
+			ft_print_file(path->file);
+		}
+		path = path->next;
+	}
 }
 
 /* Print help message on how to use 'ls' */
