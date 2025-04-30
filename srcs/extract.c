@@ -51,10 +51,7 @@ static void	ft_apply_option(t_ls *ls)
 {
 	ls->rec = ft_is_option(E_OPTION_CR, ls->option);
 
-	if (ft_is_option(E_OPTION_T, ls->option))
-		ft_option_rearrange_time(ls);
-	else
-		ft_option_rearrange_alpha(ls);
+	ft_option_rearrange(ls, ft_is_option(E_OPTION_T, ls->option));
 	if (ft_is_option(E_OPTION_R, ls->option))
 		ft_option_reverse(ls);
 }

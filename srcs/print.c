@@ -24,7 +24,7 @@ static void	ft_print_file(t_file *ptr)
 }
 
 /* Print the output in the good format if recursive */
-static void	ft_print_recursice(t_path *path, bool hidden)
+static void	ft_print_recursive(t_path *path, bool hidden, bool time)
 {
 	ft_print_path_name(path, true);
 	ft_print_file(path->file);
@@ -35,8 +35,8 @@ static void	ft_print_recursice(t_path *path, bool hidden)
 		{
 			char	*path_name = ft_str_join_path(path->name, ptr->name);
 			t_path	*rec = ft_lst_path_new(path_name, hidden);
-			ft_option_file_sort_alpha(&rec->file);
-			ft_print_recursice(rec, hidden);
+			ft_option_file_sort(&rec->file, time);
+			ft_print_recursive(rec, hidden, time);
 			free(path_name);
 			free(rec);
 		}
@@ -50,11 +50,16 @@ void	ft_print(t_ls *ls)
 	while (path != NULL)
 	{
 		if (ls->rec == true)
-			ft_print_recursice(ls->path, ft_is_option(E_OPTION_A, ls->option));
-		else if (path->folder == true)
+		{
+			ft_print_recursive(ls->path, 
+					ft_is_option(E_OPTION_A, ls->option),
+					ft_is_option(E_OPTION_T, ls->option));
+		}
+		else
 		{
 			ft_print_path_name(path, ls->multiple);
-			ft_print_file(path->file);
+			if (path->folder == true)
+				ft_print_file(path->file);
 		}
 		path = path->next;
 	}

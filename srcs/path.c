@@ -1,6 +1,8 @@
 
 #include "../incl/ft_ls.h"
 
+typedef int (*t_cmp_func)(t_path *, t_path *);
+
 /* Will itarate trough the list of token and get all 
  * path given by the prompt */
 t_path	*ft_path_get(t_token *ptr, bool hidden)
@@ -21,17 +23,26 @@ t_path	*ft_path_get(t_token *ptr, bool hidden)
 	return (path);
 }
 
-
-void	ft_path_sort_alpha(t_path **head)
+int cmp_alpha(t_path *a, t_path *b)
 {
-	bool	swapped;
-	t_path	*ptr;
-	t_path	*prev;
-	t_path	*tmp;
+	return ft_strcmp_special(a->name, b->name);
+}
 
-	if (head == NULL || *head == NULL)
-		return ;
+int cmp_time(t_path *a, t_path *b)
+{
+	if (a->time == b->time)
+		return cmp_alpha(a, b);
+	return (a->time < b->time) ? 1 : -1;
+}
 
+void ft_path_sort(t_path **head, bool sort_by_time)
+{
+	t_cmp_func cmp = sort_by_time ? cmp_time : cmp_alpha;
+	bool swapped;
+	t_path *ptr, *prev, *tmp;
+
+	if (!head || !*head)
+		return;
 	do {
 		swapped = false;
 		ptr = *head;
@@ -39,7 +50,7 @@ void	ft_path_sort_alpha(t_path **head)
 
 		while (ptr != NULL && ptr->next != NULL)
 		{
-			if (ft_strcmp_special(ptr->name, ptr->next->name) > 0)
+			if (cmp(ptr, ptr->next) > 0)
 			{
 				tmp = ptr->next;
 				ptr->next = tmp->next;
@@ -57,6 +68,5 @@ void	ft_path_sort_alpha(t_path **head)
 				ptr = ptr->next;
 			}
 		}
-	}
-	while (swapped);
+	} while (swapped);
 }

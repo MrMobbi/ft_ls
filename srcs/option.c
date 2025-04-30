@@ -103,8 +103,9 @@ char	*ft_option_get(t_token *ptr)
 }
 
 /* */
-void	ft_option_file_sort_alpha(t_file **head)
+void	ft_option_file_sort(t_file **head, bool time)
 {
+	(void) time;
 	bool	swapped;
 	t_file	*ptr;
 	t_file	*prev;
@@ -143,64 +144,45 @@ void	ft_option_file_sort_alpha(t_file **head)
 }
 
 /* this function rearange order of the token in an alphabetic order */
-void ft_option_rearrange_alpha(t_ls *ls)
+void ft_option_rearrange(t_ls *ls, bool time)
 {
 	t_path	*node = ls->path;
-	t_path	*file_head = NULL;
-	t_path	*file_node = NULL;
-	t_path	*folder_head = NULL;
-	t_path	*folder_node = NULL;
+	t_path	*file_head = NULL, *file_tail = NULL;
+	t_path	*folder_head = NULL, *folder_tail = NULL;
 	while (node != NULL)
 	{
-		if (node->folder == true)
+		t_path *next = node->next;
+		node->next = NULL;
+		if (node->folder)
 		{
-			ft_option_file_sort_alpha(&node->file);
-			if (folder_head == NULL)
-			{
-				folder_node = node;
-				folder_head = folder_node;
-			}
+			ft_option_file_sort(&node->file, time);
+			if (!folder_head)
+				folder_head = folder_tail = node;
 			else
-			{
-				folder_node->next = node;
-				folder_node = folder_node->next;
-			}
+				folder_tail = folder_tail->next = node;
 		}
 		else
 		{
-			if (file_head == NULL)
-			{
-				file_node = node;
-				file_head = file_node;
-			}
+			if (!file_head)
+				file_head = file_tail = node;
 			else
-			{
-				file_node->next = node;
-				file_node = file_node->next;
-			}
+				file_tail = file_tail->next = node;
 		}
-		node = node->next;
+		node = next;
 	}
-	if (file_node)
-		file_node->next = NULL;
-	if (folder_node)
-		folder_node->next = NULL;
-	ft_path_sort_alpha(&file_head);
-	ft_path_sort_alpha(&folder_head);
-	if (file_node != NULL)
-	{
-		file_node = file_head;
-		while (file_node->next != NULL)
-			file_node = file_node->next;
-		if (file_node != NULL)
-			file_node->next = folder_head;
-	}
-	ls->path = (file_head != NULL) ? file_head : folder_head;
-}
+	ft_path_sort(&file_head, time);
+	ft_path_sort(&folder_head, time);
 
-void	ft_option_rearrange_time(t_ls *ls)
-{
-	(void) ls;
+	if (file_tail != NULL)
+	{
+		file_tail = file_head;
+		while (file_tail->next != NULL)
+			file_tail = file_tail->next;
+		if (file_tail != NULL)
+			file_tail->next = folder_head;
+	}
+
+	ls->path = file_head ? file_head : folder_head;
 }
 
 void	ft_option_reverse(t_ls *ls)

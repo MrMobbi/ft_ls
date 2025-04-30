@@ -130,14 +130,13 @@ void	ft_lst_file_free(t_file *ptr);
 
 //	### OPTION ###
 char	*ft_option_get(t_token *ptr);
-void	ft_option_file_sort_alpha(t_file **head);
-void	ft_option_rearrange_alpha(t_ls *ls);
-void	ft_option_rearrange_time(t_ls *ls);
+void	ft_option_file_sort(t_file **head, bool time);
+void	ft_option_rearrange(t_ls *ls, bool time);
 void	ft_option_reverse(t_ls *ls);
 
 //	### PATH ###
 t_path	*ft_path_get(t_token *ptr, bool hidden);
-void	ft_path_sort_alpha(t_path **head);
+void	ft_path_sort(t_path **head, bool time);
 
 //	### PRINT ###
 void	ft_print(t_ls *ls);
