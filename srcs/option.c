@@ -143,7 +143,7 @@ void	ft_option_file_sort_alpha(t_file **head)
 }
 
 /* this function rearange order of the token in an alphabetic order */
-void ft_rearrange_alpha(t_ls *ls)
+void ft_option_rearrange_alpha(t_ls *ls)
 {
 	t_path	*node = ls->path;
 	t_path	*file_head = NULL;
@@ -196,4 +196,14 @@ void ft_rearrange_alpha(t_ls *ls)
 			file_node->next = folder_head;
 	}
 	ls->path = (file_head != NULL) ? file_head : folder_head;
+}
+
+void	ft_option_rearrange_time(t_ls *ls)
+{
+	(void) ls;
+}
+
+void	ft_option_reverse(t_ls *ls)
+{
+	(void) ls;
 }

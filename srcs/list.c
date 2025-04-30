@@ -46,7 +46,7 @@ void	ft_lst_token_free(t_token *ptr)
 
 /* Create a new path and determinate if the path is valid
  * and if the path is a folder or a file */
-t_path	*ft_lst_path_new(char *str)
+t_path	*ft_lst_path_new(char *str, bool hidden)
 {
 	t_path	*nw = malloc(sizeof(t_path));
 	if (!nw)
@@ -70,7 +70,7 @@ t_path	*ft_lst_path_new(char *str)
 		DIR				*p_dir;
 		struct dirent	*p_dirent;
 		nw->folder = true;
-		p_dir = opendir(nw->name); //DIR
+		p_dir = opendir(nw->name);
 		if (p_dir == NULL)
 		{
 			if (errno == EACCES)
@@ -80,11 +80,14 @@ t_path	*ft_lst_path_new(char *str)
 		{
 			while ((p_dirent = readdir(p_dir)) != NULL)
 			{
-				t_file	*new_file = ft_lst_file_new(p_dirent->d_name, nw->name);
-				if (nw->file == NULL)
-					nw->file = new_file;
-				else
-					ft_lst_file_add(nw->file, new_file);
+				if (hidden || p_dirent->d_name[0] != '.')
+				{
+					t_file	*new_file = ft_lst_file_new(p_dirent->d_name, nw->name);
+					if (nw->file == NULL)
+						nw->file = new_file;
+					else
+						ft_lst_file_add(nw->file, new_file);
+				}
 			}
 			closedir(p_dir);
 		}	

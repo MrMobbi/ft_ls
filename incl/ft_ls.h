@@ -121,7 +121,7 @@ void	ft_extract_path_and_option(int ac, char **av, t_ls *ls);
 t_token	*ft_lst_token_new(char *str);
 void	ft_lst_token_add(t_token *ptr, t_token *nw);
 void	ft_lst_token_free(t_token *ptr);
-t_path	*ft_lst_path_new(char *str);
+t_path	*ft_lst_path_new(char *str, bool hidden);
 void	ft_lst_path_add(t_path *ptr, t_path *nw);
 void	ft_lst_path_free(t_path *ptr);
 t_file	*ft_lst_file_new(char *name, char *dir);
@@ -131,10 +131,12 @@ void	ft_lst_file_free(t_file *ptr);
 //	### OPTION ###
 char	*ft_option_get(t_token *ptr);
 void	ft_option_file_sort_alpha(t_file **head);
-void	ft_rearrange_alpha(t_ls *ls);
+void	ft_option_rearrange_alpha(t_ls *ls);
+void	ft_option_rearrange_time(t_ls *ls);
+void	ft_option_reverse(t_ls *ls);
 
 //	### PATH ###
-t_path	*ft_path_get(t_token *ptr);
+t_path	*ft_path_get(t_token *ptr, bool hidden);
 void	ft_path_sort_alpha(t_path **head);
 
 //	### PRINT ###
