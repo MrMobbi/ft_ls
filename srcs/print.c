@@ -35,7 +35,7 @@ static void	ft_print_recursive(t_path *path, bool hidden, bool time)
 		{
 			char	*path_name = ft_str_join_path(path->name, ptr->name);
 			t_path	*rec = ft_lst_path_new(path_name, hidden);
-			ft_option_file_sort(&rec->file, time);
+			ft_sort_type((void**)&rec->file, time, TYPE_FILE);
 			ft_print_recursive(rec, hidden, time);
 			free(path_name);
 			free(rec);

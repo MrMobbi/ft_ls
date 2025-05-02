@@ -102,47 +102,6 @@ char	*ft_option_get(t_token *ptr)
 	return (option);
 }
 
-/* */
-void	ft_option_file_sort(t_file **head, bool time)
-{
-	(void) time;
-	bool	swapped;
-	t_file	*ptr;
-	t_file	*prev;
-	t_file	*tmp;
-
-	if (head == NULL || *head == NULL)
-		return ;
-
-	do {
-		swapped = false;
-		ptr = *head;
-		prev = NULL;
-
-		while (ptr != NULL && ptr->next != NULL)
-		{
-			if (ft_strcmp_special(ptr->name, ptr->next->name) > 0)
-			{
-				tmp = ptr->next;
-				ptr->next = tmp->next;
-				tmp->next = ptr;
-				if (prev == NULL)
-					*head = tmp;
-				else
-					prev->next = tmp;
-				swapped = true;
-				prev = tmp;
-			}
-			else
-			{
-				prev = ptr;
-				ptr = ptr->next;
-			}
-		}
-	}
-	while (swapped);
-}
-
 /* this function rearange order of the token in an alphabetic order */
 void ft_option_rearrange(t_ls *ls, bool time)
 {
@@ -155,7 +114,7 @@ void ft_option_rearrange(t_ls *ls, bool time)
 		node->next = NULL;
 		if (node->folder)
 		{
-			ft_option_file_sort(&node->file, time);
+			ft_sort_type((void**)&node->file, time, TYPE_FILE);
 			if (!folder_head)
 				folder_head = folder_tail = node;
 			else
@@ -170,8 +129,8 @@ void ft_option_rearrange(t_ls *ls, bool time)
 		}
 		node = next;
 	}
-	ft_path_sort(&file_head, time);
-	ft_path_sort(&folder_head, time);
+	ft_sort_type((void **)&file_head, time, TYPE_FILE);
+	ft_sort_type((void **)&folder_head, time, TYPE_PATH);
 
 	if (file_tail != NULL)
 	{
@@ -181,7 +140,6 @@ void ft_option_rearrange(t_ls *ls, bool time)
 		if (file_tail != NULL)
 			file_tail->next = folder_head;
 	}
-
 	ls->path = file_head ? file_head : folder_head;
 }
 

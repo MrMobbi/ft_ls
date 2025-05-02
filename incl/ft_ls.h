@@ -99,6 +99,18 @@ typedef struct	s_file {
 	struct s_file	*next;
 }	t_file;
 
+typedef enum {
+	TYPE_PATH = 1,
+	TYPE_FILE = 2
+}	compare_type;
+
+typedef struct	t_compare {
+	union {
+		t_path	*path;
+		t_file	*file;
+	} data;
+}	t_compare;
+
 //	######################
 //	####   FUNCTION   ####
 //	######################
@@ -136,7 +148,6 @@ void	ft_option_reverse(t_ls *ls);
 
 //	### PATH ###
 t_path	*ft_path_get(t_token *ptr, bool hidden);
-void	ft_path_sort(t_path **head, bool time);
 
 //	### PRINT ###
 void	ft_print(t_ls *ls);
@@ -155,7 +166,9 @@ size_t	ft_strlen(char *str);
 char	*ft_str_dup(char *str);
 int		ft_str_cmp(char *str1, char *str2);
 char	*ft_str_join_path(char *start, char *file);
-int		ft_strcmp_special(char *str1, char *str2);
 bool	ft_is_option(char c, char *option);
+int		ft_cmp_time(const void *a, const void *b, compare_type type_cmp);
+int		ft_cmp_alpha(const void *a, const void *b, compare_type type_cmp);
+void	ft_sort_type(void **head, bool time, compare_type type_cmp);
 
 #endif
