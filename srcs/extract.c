@@ -43,14 +43,15 @@ static void	ft_token_check_path(t_token *ptr)
 static void	ft_get_path_and_option(t_ls *ls, t_token *token)
 {
 	ls->option = ft_option_get(token);
-	ls->path = ft_path_get(token, ft_is_option(E_OPTION_A, ls->option));
+	ls->path = ft_path_get(token, 
+			ft_is_option(E_OPTION_A, ls->option),
+			ft_is_option(E_OPTION_L, ls->option));
 }
 
 /* Manage the aplication of the option */
 static void	ft_apply_option(t_ls *ls)
 {
 	ls->rec = ft_is_option(E_OPTION_CR, ls->option);
-
 	ft_option_rearrange(ls, ft_is_option(E_OPTION_T, ls->option));
 	if (ft_is_option(E_OPTION_R, ls->option))
 		ft_option_reverse(ls);

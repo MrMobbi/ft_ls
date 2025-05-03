@@ -18,10 +18,6 @@
 # include <stdbool.h>
 # include <stdarg.h>
 
-//	#############################
-//	####   DEFINE AND ENUM   ####
-//	#############################
-
 //	ERROR MSG
 # define D_ERR_MSG_MALLOC			"Malloc failled"
 # define D_ERR_MSG_UNRECO_OPTION	"ls: unrecognized option:"
@@ -64,10 +60,6 @@ enum e_file_type {
 	E_PREVIOUS = 5,
 };
 
-//	##################
-//	####   LIST   ####
-//	##################
-
 typedef struct	s_ls {
 	int		return_status;
 	char	*option;
@@ -87,6 +79,11 @@ typedef struct	s_path {
 	bool	folder;
 	int		error;
 	time_t	time;
+	mode_t      mode;         // permissions and file type
+	nlink_t     nlink;        // number of hard links
+	uid_t       uid;          // user ID
+	gid_t       gid;          // group ID
+	off_t       size;         // file size
 	struct s_file	*file;
 	struct s_path	*next;
 }	t_path;
@@ -96,24 +93,26 @@ typedef struct	s_file {
 	char	*path;
 	int		type;
 	time_t	time;
+	mode_t      mode;         // permissions and file type
+	nlink_t     nlink;        // number of hard links
+	uid_t       uid;          // user ID
+	gid_t       gid;          // group ID
+	off_t       size;         // file size
 	struct s_file	*next;
 }	t_file;
+
+typedef struct	s_long{
+	mode_t      mode;         // permissions and file type
+	nlink_t     nlink;        // number of hard links
+	uid_t       uid;          // user ID
+	gid_t       gid;          // group ID
+	off_t       size;         // file size
+}	t_long;
 
 typedef enum {
 	TYPE_PATH = 1,
 	TYPE_FILE = 2
 }	compare_type;
-
-typedef struct	t_compare {
-	union {
-		t_path	*path;
-		t_file	*file;
-	} data;
-}	t_compare;
-
-//	######################
-//	####   FUNCTION   ####
-//	######################
 
 //	### DEBUG ###
 void	db_ls(t_ls *ls);
@@ -133,10 +132,10 @@ void	ft_extract_path_and_option(int ac, char **av, t_ls *ls);
 t_token	*ft_lst_token_new(char *str);
 void	ft_lst_token_add(t_token *ptr, t_token *nw);
 void	ft_lst_token_free(t_token *ptr);
-t_path	*ft_lst_path_new(char *str, bool hidden);
+t_path	*ft_lst_path_new(char *str, bool hidden, bool long_listing);
 void	ft_lst_path_add(t_path *ptr, t_path *nw);
 void	ft_lst_path_free(t_path *ptr);
-t_file	*ft_lst_file_new(char *name, char *dir);
+t_file	*ft_lst_file_new(char *name, char *dir, bool long_listing);
 void	ft_lst_file_add(t_file *ptr, t_file *nw);
 void	ft_lst_file_free(t_file *ptr);
 
@@ -147,7 +146,7 @@ void	ft_option_rearrange(t_ls *ls, bool time);
 void	ft_option_reverse(t_ls *ls);
 
 //	### PATH ###
-t_path	*ft_path_get(t_token *ptr, bool hidden);
+t_path	*ft_path_get(t_token *ptr, bool hidden, bool long_listing);
 
 //	### PRINT ###
 void	ft_print(t_ls *ls);

@@ -131,7 +131,6 @@ void ft_option_rearrange(t_ls *ls, bool time)
 	}
 	ft_sort_type((void **)&file_head, time, TYPE_FILE);
 	ft_sort_type((void **)&folder_head, time, TYPE_PATH);
-
 	if (file_tail != NULL)
 	{
 		file_tail = file_head;

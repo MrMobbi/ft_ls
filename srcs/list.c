@@ -46,7 +46,7 @@ void	ft_lst_token_free(t_token *ptr)
 
 /* Create a new path and determinate if the path is valid
  * and if the path is a folder or a file */
-t_path	*ft_lst_path_new(char *str, bool hidden)
+t_path	*ft_lst_path_new(char *str, bool hidden, bool long_listing)
 {
 	t_path	*nw = malloc(sizeof(t_path));
 	if (!nw)
@@ -63,6 +63,14 @@ t_path	*ft_lst_path_new(char *str, bool hidden)
 			nw->error = E_ERR_EXIST;
 		else
 			ft_error(str, errno);
+	}
+	if (long_listing)
+	{
+		nw->mode = st.st_mode;
+		nw->nlink = st.st_nlink;
+		nw->uid = st.st_uid;
+		nw->gid = st.st_gid;
+		nw->size = st.st_size;
 	}
 	nw->time = st.st_mtime;
 	if (S_ISDIR(st.st_mode))
@@ -82,7 +90,7 @@ t_path	*ft_lst_path_new(char *str, bool hidden)
 			{
 				if (hidden || p_dirent->d_name[0] != '.')
 				{
-					t_file	*new_file = ft_lst_file_new(p_dirent->d_name, nw->name);
+					t_file	*new_file = ft_lst_file_new(p_dirent->d_name, nw->name, long_listing);
 					if (nw->file == NULL)
 						nw->file = new_file;
 					else
@@ -120,7 +128,7 @@ void	ft_lst_path_free(t_path *ptr)
 // ###   FILE   ###
 // ################
 
-t_file	*ft_lst_file_new(char *name, char *dir)
+t_file	*ft_lst_file_new(char *name, char *dir, bool long_listing)
 {
 	t_file	*nw = malloc(sizeof(t_file));
 	if (!nw)
@@ -131,6 +139,14 @@ t_file	*ft_lst_file_new(char *name, char *dir)
 	struct stat	s;
 	if (lstat(nw->path, &s) == 0)
 	{
+		if (long_listing)
+		{
+			nw->mode = s.st_mode;
+			nw->nlink = s.st_nlink;
+			nw->uid = s.st_uid;
+			nw->gid = s.st_gid;
+			nw->size = s.st_size;
+		}
 		nw->time = s.st_mtime;
 		if (S_ISDIR(s.st_mode)) // directory check
 			nw->type = E_FOLDER;

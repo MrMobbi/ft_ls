@@ -149,25 +149,27 @@ int	ft_cmp_alpha(const void *a, const void *b, compare_type type_cmp)
 {
 	int		i = 0;
 	char	c1, c2;
-	const char *str1;
-	const char *str2;
+	char *str1;
+	char *str2;
 
 	switch (type_cmp) {
 		case  TYPE_FILE:
-			const t_file	*fa = (const t_file *) a;
-			const t_file	*fb = (const t_file *) b;
+			t_file	*fa = (t_file *) a;
+			t_file	*fb = (t_file *) b;
 			str1 = fa->name;
 			str2 = fb->name;
 			break ;
 		case TYPE_PATH:
-			const t_path	*pa = (const t_path *) a;
-			const t_path	*pb = (const t_path *) b;
+			t_path	*pa = (t_path *) a;
+			t_path	*pb = (t_path *) b;
 			str1 = pa->name;
 			str2 = pb->name;
 			break ;
 		default:
-			return (-2);
+			ft_error("Error cmp alpha", 3);
 	}
+	if (ft_str_cmp(str1, "..") == 0 && ft_str_cmp(str2, ".") == 0)
+		return (1);
 	while (*str1 != '\0')
 	{
 		if (*str1 == '.')
@@ -212,11 +214,11 @@ int ft_cmp_time(const void *a, const void *b, compare_type type_cmp)
 			time_b = pb->time;
 			break ;
 		default:
-			return (-2);
+			ft_error("Error cmp time", 3);
 	}
 	if (time_a == time_b)
-		return ft_cmp_alpha(a, b, type_cmp);
-	return (time_a < time_b) ? 1 : -1;
+		return (ft_cmp_alpha(a, b, type_cmp));
+	return ((time_a < time_b) ? 1 : 0);
 }
 
 bool	ft_is_option(char c, char *option)
@@ -248,7 +250,7 @@ void ft_sort_type(void **head, bool sort_by_time, compare_type type_cmp)
 			*head = ft_swap_path((t_path*) *head, sort_by_time);
 			break ;
 		default:
-			return (ft_error("error cmp", 3));
+			ft_error("error cmp", 3);
 	}
 }
 
@@ -256,7 +258,7 @@ t_file	*ft_swap_file(t_file *head, bool sort_by_time)
 {
 	t_cmp_func cmp = sort_by_time ? ft_cmp_time : ft_cmp_alpha;
 	t_file	*ptr, *tmp, *prev;
-	bool			swapped;
+	bool	swapped;
 	do {
 		swapped = false;
 		ptr = head;
@@ -290,7 +292,7 @@ t_path	*ft_swap_path(t_path *head, bool sort_by_time)
 {
 	t_cmp_func cmp = sort_by_time ? ft_cmp_time : ft_cmp_alpha;
 	t_path	*ptr, *tmp, *prev;
-	bool			swapped;
+	bool	swapped;
 	do {
 		swapped = false;
 		ptr = head;
