@@ -6,11 +6,15 @@
 t_path	*ft_path_get(t_token *ptr, bool hidden, bool long_listing)
 {
 	t_path	*path = NULL;
+	t_option	option;
+
+	option.hidden = hidden;
+	option.long_listing = long_listing;
 	while (ptr != NULL)
 	{
 		if (!ptr->option)
 		{
-			t_path	*new_path = ft_lst_path_new(ptr->name, hidden, long_listing);
+			t_path	*new_path = ft_lst_path_new(ptr->name, option);
 			if (path == NULL)
 				path = new_path;
 			else

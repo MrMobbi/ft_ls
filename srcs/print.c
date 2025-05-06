@@ -24,7 +24,7 @@ static void	ft_print_file(t_file *ptr)
 }
 
 /* Print the output in the good format if recursive */
-static void	ft_print_recursive(t_path *path, bool hidden, bool time, bool long_listing)
+static void	ft_print_recursive(t_path *path, t_option option)
 {
 	ft_print_path_name(path, true);
 	ft_print_file(path->file);
@@ -34,9 +34,9 @@ static void	ft_print_recursive(t_path *path, bool hidden, bool time, bool long_l
 		if (ptr->type == E_FOLDER)
 		{
 			char	*path_name = ft_str_join_path(path->name, ptr->name);
-			t_path	*rec = ft_lst_path_new(path_name, hidden, long_listing);
-			ft_sort_type((void**)&rec->file, time, TYPE_FILE);
-			ft_print_recursive(rec, hidden, time, long_listing);
+			t_path	*rec = ft_lst_path_new(path_name, option);
+			ft_sort_type((void**)&rec->file, option.time, TYPE_FILE);
+			ft_print_recursive(rec,option);
 			free(path_name);
 			free(rec);
 		}
@@ -47,15 +47,14 @@ static void	ft_print_recursive(t_path *path, bool hidden, bool time, bool long_l
 void	ft_print(t_ls *ls)
 {
 	t_path	*path = ls->path;
+	t_option option;
+	option.hidden = ft_is_option(E_OPTION_A, ls->option);
+	option.time = ft_is_option(E_OPTION_T, ls->option);
+	option.long_listing = ft_is_option(E_OPTION_L, ls->option);
 	while (path != NULL)
 	{
 		if (ls->rec == true)
-		{
-			ft_print_recursive(ls->path, 
-					ft_is_option(E_OPTION_A, ls->option),
-					ft_is_option(E_OPTION_T, ls->option),
-					ft_is_option(E_OPTION_L, ls->option));
-		}
+			ft_print_recursive(ls->path, option);
 		else
 		{
 			ft_print_path_name(path, ls->multiple);

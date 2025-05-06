@@ -1,7 +1,6 @@
 
 #include "../incl/ft_ls.h"
 
-typedef int (*t_cmp_func)(const void *, const void *, compare_type);
 
 size_t	ft_putnbr_size_t(size_t n)
 {
@@ -151,19 +150,20 @@ int	ft_cmp_alpha(const void *a, const void *b, compare_type type_cmp)
 	char	c1, c2;
 	char *str1;
 	char *str2;
+	t_cmp	cmp_a, cmp_b;
 
 	switch (type_cmp) {
 		case  TYPE_FILE:
-			t_file	*fa = (t_file *) a;
-			t_file	*fb = (t_file *) b;
-			str1 = fa->name;
-			str2 = fb->name;
+			cmp_a.file = (t_file *) a;
+			cmp_b.file = (t_file *) b;
+			str1 = cmp_a.file->name;
+			str2 = cmp_b.file->name;
 			break ;
 		case TYPE_PATH:
-			t_path	*pa = (t_path *) a;
-			t_path	*pb = (t_path *) b;
-			str1 = pa->name;
-			str2 = pb->name;
+			cmp_a.path = (t_path *) a;
+			cmp_b.path = (t_path *) b;
+			str1 = cmp_a.path->name;
+			str2 = cmp_b.path->name;
 			break ;
 		default:
 			ft_error("Error cmp alpha", 3);
@@ -200,18 +200,19 @@ int	ft_cmp_alpha(const void *a, const void *b, compare_type type_cmp)
 int ft_cmp_time(const void *a, const void *b, compare_type type_cmp)
 {
 	time_t	time_a, time_b;
+	t_cmp	cmp_a, cmp_b;
 	switch (type_cmp) {
 		case  TYPE_FILE:
-			const t_file *fa = (const t_file *) a;
-			const t_file *fb = (const t_file *) b;
-			time_a = fa->time;
-			time_b = fb->time;
+			cmp_a.file = (t_file *)a;
+			cmp_b.file = (t_file *)b;
+			time_a = cmp_a.file->time;
+			time_b = cmp_b.file->time;
 			break ;
 		case TYPE_PATH:
-			const t_path *pa = (const t_path *) a;
-			const t_path *pb = (const t_path *) b;
-			time_a = pa->time;
-			time_b = pb->time;
+			cmp_a.path = (t_path *)a;
+			cmp_b.path = (t_path *)b;
+			time_a = cmp_a.path->time;
+			time_b = cmp_b.path->time;
 			break ;
 		default:
 			ft_error("Error cmp time", 3);
@@ -234,8 +235,65 @@ bool	ft_is_option(char c, char *option)
 	return false;
 }
 
-t_file	*ft_swap_file(t_file *head, bool sort_by_time);
-t_path	*ft_swap_path(t_path *head, bool sort_by_time);
+static void	*ft_file_next_get(void *ptr)
+{
+	return (((t_file *)ptr)->next);
+}
+
+static void	*ft_path_next_get(void *ptr)
+{
+	return (((t_path *)ptr)->next);
+}
+
+static void	ft_file_next_set(void *ptr, void *next)
+{
+	((t_file *)ptr)->next = (t_file *)next;
+}
+
+static void	ft_path_next_set(void *ptr, void *next)
+{
+	((t_file *)ptr)->next = (t_file *)next;
+}
+
+typedef int (*t_cmp_func)(const void *, const void *, compare_type);
+typedef void *(*t_get_next_func)(void *);
+typedef void (*t_set_next_func)(void *, void *);
+static void	*ft_swap(void *head, bool sort_by_time, bool file)
+{
+	t_cmp_func cmp = sort_by_time ? ft_cmp_time : ft_cmp_alpha;
+	t_get_next_func next_get = file ? ft_file_next_get : ft_path_next_get;
+	t_set_next_func next_set = file ? ft_file_next_set : ft_path_next_set;
+	void	*ptr, *tmp, *prev;
+	bool	swapped;
+	do {
+		swapped = false;
+		ptr = head;
+		prev = NULL;
+
+		while (ptr != NULL && next_get(ptr) != NULL)
+		{
+			if (cmp(ptr, next_get(ptr), TYPE_FILE) > 0)
+			{
+				tmp = next_get(ptr);
+				next_set(ptr, next_get(tmp));
+				next_set(tmp, ptr);
+				if (prev == NULL)
+					head = tmp;
+				else
+					next_set(prev, tmp);
+				swapped = true;
+				prev = tmp;
+			}
+			else
+			{
+				prev = ptr;
+				ptr = next_get(ptr);
+			}
+		}
+	} while (swapped);
+	return (head);
+}
+
 void ft_sort_type(void **head, bool sort_by_time, compare_type type_cmp)
 {
 	if (!head || !*head)
@@ -244,80 +302,12 @@ void ft_sort_type(void **head, bool sort_by_time, compare_type type_cmp)
 	switch (type_cmp)
 	{
 		case TYPE_FILE:
-			*head = ft_swap_file((t_file*) *head, sort_by_time);
+			*head = ft_swap((t_file*) *head, sort_by_time, true);
 			break ;
 		case TYPE_PATH:
-			*head = ft_swap_path((t_path*) *head, sort_by_time);
+			*head = ft_swap((t_path*) *head, sort_by_time, false);
 			break ;
 		default:
 			ft_error("error cmp", 3);
 	}
-}
-
-t_file	*ft_swap_file(t_file *head, bool sort_by_time)
-{
-	t_cmp_func cmp = sort_by_time ? ft_cmp_time : ft_cmp_alpha;
-	t_file	*ptr, *tmp, *prev;
-	bool	swapped;
-	do {
-		swapped = false;
-		ptr = head;
-		prev = NULL;
-
-		while (ptr != NULL && ptr->next != NULL)
-		{
-			if (cmp(ptr, ptr->next, TYPE_FILE) > 0)
-			{
-				tmp = ptr->next;
-				ptr->next = tmp->next;
-				tmp->next = ptr;
-				if (prev == NULL)
-					head = tmp;
-				else
-					prev->next = tmp;
-				swapped = true;
-				prev = tmp;
-			}
-			else
-			{
-				prev = ptr;
-				ptr = ptr->next;
-			}
-		}
-	} while (swapped);
-	return (head);
-}
-
-t_path	*ft_swap_path(t_path *head, bool sort_by_time)
-{
-	t_cmp_func cmp = sort_by_time ? ft_cmp_time : ft_cmp_alpha;
-	t_path	*ptr, *tmp, *prev;
-	bool	swapped;
-	do {
-		swapped = false;
-		ptr = head;
-		prev = NULL;
-
-		while (ptr != NULL && ptr->next != NULL)
-		{
-			if (cmp(ptr, ptr->next, TYPE_PATH) > 0)
-			{
-				tmp = ptr->next;
-				ptr->next = tmp->next;
-				tmp->next = ptr;
-				if (prev == NULL)
-					head = tmp;
-				else
-					prev->next = tmp;
-				swapped = true;
-				prev = tmp;
-			}
-			else
-			{
-				prev = ptr;
-				ptr = ptr->next;
-			}
-		}
-	} while (swapped);
-	return (head);
 }

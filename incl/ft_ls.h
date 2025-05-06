@@ -79,11 +79,7 @@ typedef struct	s_path {
 	bool	folder;
 	int		error;
 	time_t	time;
-	mode_t      mode;         // permissions and file type
-	nlink_t     nlink;        // number of hard links
-	uid_t       uid;          // user ID
-	gid_t       gid;          // group ID
-	off_t       size;         // file size
+	struct s_long	*extand;
 	struct s_file	*file;
 	struct s_path	*next;
 }	t_path;
@@ -93,21 +89,31 @@ typedef struct	s_file {
 	char	*path;
 	int		type;
 	time_t	time;
-	mode_t      mode;         // permissions and file type
-	nlink_t     nlink;        // number of hard links
-	uid_t       uid;          // user ID
-	gid_t       gid;          // group ID
-	off_t       size;         // file size
-	struct s_file	*next;
+	struct s_long	*extand;
+	struct s_file *next;
 }	t_file;
 
-typedef struct	s_long{
+typedef struct	s_long {
 	mode_t      mode;         // permissions and file type
 	nlink_t     nlink;        // number of hard links
 	uid_t       uid;          // user ID
 	gid_t       gid;          // group ID
 	off_t       size;         // file size
 }	t_long;
+
+typedef struct	s_cmp {
+	union {
+		struct s_file *file;
+		struct s_path *path;
+	};
+} t_cmp;
+
+typedef struct s_option 
+{
+	bool	hidden;
+	bool	long_listing;
+	bool	time;
+}	t_option;
 
 typedef enum {
 	TYPE_PATH = 1,
@@ -132,7 +138,7 @@ void	ft_extract_path_and_option(int ac, char **av, t_ls *ls);
 t_token	*ft_lst_token_new(char *str);
 void	ft_lst_token_add(t_token *ptr, t_token *nw);
 void	ft_lst_token_free(t_token *ptr);
-t_path	*ft_lst_path_new(char *str, bool hidden, bool long_listing);
+t_path	*ft_lst_path_new(char *str, t_option);
 void	ft_lst_path_add(t_path *ptr, t_path *nw);
 void	ft_lst_path_free(t_path *ptr);
 t_file	*ft_lst_file_new(char *name, char *dir, bool long_listing);
