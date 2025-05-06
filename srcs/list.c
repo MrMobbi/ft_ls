@@ -55,6 +55,7 @@ t_path	*ft_lst_path_new(char *str, t_option option)
 	nw->folder = false;
 	nw->next = NULL;
 	nw->file = NULL;
+	nw->extand = NULL;
 
 	struct stat	st;
 	if (lstat(nw->name, &st) != 0)
@@ -123,7 +124,8 @@ void	ft_lst_path_free(t_path *ptr)
 		free(ptr->name);
 		if (ptr->folder == true)
 			ft_lst_file_free(ptr->file);
-		free(ptr->extand);
+		if (ptr->extand)
+			free(ptr->extand);
 		free(ptr);
 		ptr = tmp;
 	}
@@ -141,6 +143,7 @@ t_file	*ft_lst_file_new(char *name, char *dir, bool long_listing)
 	nw->name = ft_str_dup(name);
 	nw->path = ft_str_join_path(dir, name);
 	nw->next = NULL;
+	nw->extand = NULL;
 	struct stat	s;
 	if (lstat(nw->path, &s) == 0)
 	{
@@ -189,7 +192,8 @@ void	ft_lst_file_free(t_file *ptr)
 		tmp = ptr->next;
 		free(ptr->name);
 		free(ptr->path);
-		free(ptr->extand);
+		if (ptr->extand)
+			free(ptr->extand);
 		free(ptr);
 		ptr = tmp;
 	}

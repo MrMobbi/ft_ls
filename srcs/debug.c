@@ -44,7 +44,6 @@ void	db_print_file(t_file *ptr)
 			ft_printf("Is current\n");
 		else if (ptr->type == E_PREVIOUS)
 			ft_printf("Is previous\n");
-
 		ptr = ptr->next;
 	}
 }

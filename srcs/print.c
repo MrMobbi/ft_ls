@@ -77,10 +77,12 @@ static void	ft_print_path_name(t_path *path, bool multiple, bool extand)
 		else
 			ft_printf("%s", path->name);
 	}
-	if (path->folder != true && path->next != NULL && path->next->folder != true)
-		ft_printf("  ");
-	else if (path->folder == true && multiple == true)
+	if (path->folder == true && multiple == true)
 		ft_printf("%s:\n", path->name);
+	if (!path->folder && path->next != NULL && path->next->folder != true)
+		ft_printf("  ");
+	else if (path->next != NULL)
+		ft_printf("\n");
 }
 
 static void	ft_print_file(t_file *ptr, bool extand)
@@ -111,6 +113,7 @@ static void	ft_print_recursive(t_path *path, t_option option)
 {
 	ft_print_path_name(path, true, option.long_listing);
 	ft_print_file(path->file, option.long_listing);
+	ft_printf("\n");
 	t_file	*ptr = path->file;
 	while (ptr != NULL)
 	{
@@ -119,7 +122,7 @@ static void	ft_print_recursive(t_path *path, t_option option)
 			char	*path_name = ft_str_join_path(path->name, ptr->name);
 			t_path	*rec = ft_lst_path_new(path_name, option);
 			ft_sort_type((void**)&rec->file, option, TYPE_FILE);
-			ft_print_recursive(rec,option);
+			ft_print_recursive(rec, option);
 			free(path_name);
 			free(rec);
 		}

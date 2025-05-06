@@ -121,6 +121,10 @@ typedef enum {
 	TYPE_FILE = 2
 }	compare_type;
 
+typedef int (*t_cmp_func)(const void *, const void *, compare_type);
+typedef void *(*t_get_next_func)(void *);
+typedef void (*t_set_next_func)(void *, void *);
+
 //	### DEBUG ###
 void	db_ls(t_ls *ls);
 void	db_print_token(t_token *ptr);
