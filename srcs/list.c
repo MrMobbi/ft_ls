@@ -64,18 +64,19 @@ t_path	*ft_lst_path_new(char *str, t_option option)
 		else
 			ft_error(str, errno);
 	}
+	nw->time = st.st_mtime;
 	if (option.long_listing)
 	{
 		nw->extand = malloc(sizeof(t_long));
 		if (!nw->extand)
 			ft_error(D_ERR_MSG_MALLOC, E_ERR_MALLOC);
+		nw->extand->time = nw->time;
 		nw->extand->mode = st.st_mode;
 		nw->extand->nlink = st.st_nlink;
 		nw->extand->uid = st.st_uid;
 		nw->extand->gid = st.st_gid;
 		nw->extand->size = st.st_size;
 	}
-	nw->time = st.st_mtime;
 	if (S_ISDIR(st.st_mode))
 	{
 		DIR				*p_dir;
@@ -122,6 +123,7 @@ void	ft_lst_path_free(t_path *ptr)
 		free(ptr->name);
 		if (ptr->folder == true)
 			ft_lst_file_free(ptr->file);
+		free(ptr->extand);
 		free(ptr);
 		ptr = tmp;
 	}
@@ -142,23 +144,24 @@ t_file	*ft_lst_file_new(char *name, char *dir, bool long_listing)
 	struct stat	s;
 	if (lstat(nw->path, &s) == 0)
 	{
+		nw->time = s.st_mtime;
 		if (long_listing)
 		{
 			nw->extand = malloc(sizeof(t_long));
 			if (!nw->extand)
 				ft_error(D_ERR_MSG_MALLOC, E_ERR_MALLOC);
+			nw->extand->time = nw->time;
 			nw->extand->mode = s.st_mode;
 			nw->extand->nlink = s.st_nlink;
 			nw->extand->uid = s.st_uid;
 			nw->extand->gid = s.st_gid;
 			nw->extand->size = s.st_size;
 		}
-		nw->time = s.st_mtime;
-		if (S_ISDIR(s.st_mode)) // directory check
+		if (S_ISDIR(s.st_mode))
 			nw->type = E_FOLDER;
 		else
 			nw->type = E_OTHER;
-		if (nw->name[0] == '.') // hide file check
+		if (nw->name[0] == '.')
 			nw->type = E_HIDE;
 		if (!ft_str_cmp(nw->name, "."))
 			nw->type = E_CURRENT;
@@ -188,6 +191,7 @@ void	ft_lst_file_free(t_file *ptr)
 		tmp = ptr->next;
 		free(ptr->name);
 		free(ptr->path);
+		free(ptr->extand);
 		free(ptr);
 		ptr = tmp;
 	}

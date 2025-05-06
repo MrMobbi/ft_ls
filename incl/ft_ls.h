@@ -94,6 +94,7 @@ typedef struct	s_file {
 }	t_file;
 
 typedef struct	s_long {
+	time_t		time;
 	mode_t      mode;         // permissions and file type
 	nlink_t     nlink;        // number of hard links
 	uid_t       uid;          // user ID

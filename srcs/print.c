@@ -1,23 +1,106 @@
 
 #include "../incl/ft_ls.h"
 
-static void	ft_print_path_name(t_path *path, bool multiple)
+
+static void	ft_print_permissions(mode_t mode)
 {
-	if (path->folder != true || multiple == true)
-		ft_printf("%s", path->name);
+	char c;
+
+	c = S_ISDIR(mode) ? 'd' :
+	    S_ISLNK(mode) ? 'l' :
+	    S_ISCHR(mode) ? 'c' :
+	    S_ISBLK(mode) ? 'b' :
+	    S_ISFIFO(mode) ? 'p' :
+	    S_ISSOCK(mode) ? 's' : '-';
+	ft_putchar(c);
+	ft_putchar((mode & S_IRUSR) ? 'r' : '-');
+	ft_putchar((mode & S_IWUSR) ? 'w' : '-');
+	ft_putchar((mode & S_IXUSR) ? 'x' : '-');
+	ft_putchar((mode & S_IRGRP) ? 'r' : '-');
+	ft_putchar((mode & S_IWGRP) ? 'w' : '-');
+	ft_putchar((mode & S_IXGRP) ? 'x' : '-');
+	ft_putchar((mode & S_IROTH) ? 'r' : '-');
+	ft_putchar((mode & S_IWOTH) ? 'w' : '-');
+	ft_putchar((mode & S_IXOTH) ? 'x' : '-');
+}
+
+void	ft_print_extanded(t_long *extand, char *name)
+{
+	struct passwd	*pw = getpwuid(extand->uid);
+	struct group	*gr = getgrgid(extand->gid);
+	char			*time_str = ctime(&extand->time);
+
+	ft_print_permissions(extand->mode);
+	ft_printf(" %d ", extand->nlink);
+	ft_printf("%s ", pw ? pw->pw_name : "unknown");
+	ft_printf("%s ", gr ? gr->gr_name : "unknown");
+	ft_printf("%D ", (size_t)extand->size);
+	if (time_str)
+	{
+		time_str[16] = '\0';
+		ft_printf("%s ", time_str + 4);
+	}
+	ft_printf("%s", name);
+	if (S_ISLNK(extand->mode))
+	{
+		char buf[1024];
+		ssize_t len = readlink(name, buf, sizeof(buf) - 1);
+		if (len != -1)
+		{
+			buf[len] = '\0';
+			ft_printf(" -> %s", buf);
+		}
+	}
+}
+
+static void	ft_print_block(t_file *ptr)
+{
+	struct stat st;
+	int total_blocks = 0;
+	while (ptr)
+	{
+		if (lstat(ptr->path, &st) == 0)
+			total_blocks += st.st_blocks;
+		else
+			ft_error("", 1);
+		ptr = ptr->next;
+	}
+	ft_printf("total %d\n", total_blocks / 2);
+}
+
+static void	ft_print_path_name(t_path *path, bool multiple, bool extand)
+{
+	if (path->folder != true)
+	{
+		if (extand)
+			ft_print_extanded(path->extand, path->name);
+		else
+			ft_printf("%s", path->name);
+	}
 	if (path->folder != true && path->next != NULL && path->next->folder != true)
 		ft_printf("  ");
 	else if (path->folder == true && multiple == true)
-		ft_printf(":\n");
+		ft_printf("%s:\n", path->name);
 }
 
-static void	ft_print_file(t_file *ptr)
+static void	ft_print_file(t_file *ptr, bool extand)
 {
+	if (extand)
+		ft_print_block(ptr);
 	while (ptr != NULL)
 	{
-		ft_printf("%s", ptr->name);
-		if (ptr->next != NULL)
-			ft_printf("  ");
+		if (extand)
+		{
+			ft_print_extanded(ptr->extand, ptr->name);
+			if (ptr->next != NULL)
+				ft_printf("\n");
+		}
+		else
+		{
+			ft_printf("%s", ptr->name);
+			if (ptr->next != NULL)
+				ft_printf("  ");
+		}
 		ptr = ptr->next;
 	}
 	ft_printf("\n");
@@ -26,8 +109,8 @@ static void	ft_print_file(t_file *ptr)
 /* Print the output in the good format if recursive */
 static void	ft_print_recursive(t_path *path, t_option option)
 {
-	ft_print_path_name(path, true);
-	ft_print_file(path->file);
+	ft_print_path_name(path, true, option.long_listing);
+	ft_print_file(path->file, option.long_listing);
 	t_file	*ptr = path->file;
 	while (ptr != NULL)
 	{
@@ -57,9 +140,9 @@ void	ft_print(t_ls *ls)
 			ft_print_recursive(ls->path, option);
 		else
 		{
-			ft_print_path_name(path, ls->multiple);
+			ft_print_path_name(path, ls->multiple, option.long_listing);
 			if (path->folder == true)
-				ft_print_file(path->file);
+				ft_print_file(path->file, option.long_listing);
 		}
 		path = path->next;
 	}
