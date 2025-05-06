@@ -118,7 +118,7 @@ static void	ft_print_recursive(t_path *path, t_option option)
 		{
 			char	*path_name = ft_str_join_path(path->name, ptr->name);
 			t_path	*rec = ft_lst_path_new(path_name, option);
-			ft_sort_type((void**)&rec->file, option.time, TYPE_FILE);
+			ft_sort_type((void**)&rec->file, option, TYPE_FILE);
 			ft_print_recursive(rec,option);
 			free(path_name);
 			free(rec);
@@ -134,6 +134,7 @@ void	ft_print(t_ls *ls)
 	option.hidden = ft_is_option(E_OPTION_A, ls->option);
 	option.time = ft_is_option(E_OPTION_T, ls->option);
 	option.long_listing = ft_is_option(E_OPTION_L, ls->option);
+	option.reverse = ft_is_option(E_OPTION_R, ls->option);
 	while (path != NULL)
 	{
 		if (ls->rec == true)

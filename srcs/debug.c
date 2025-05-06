@@ -38,8 +38,6 @@ void	db_print_file(t_file *ptr)
 		ft_printf("[%s] ", ptr->name);
 		if (ptr->type == E_FOLDER)
 			ft_printf("Is a folder\n");
-		else if (ptr->type == E_HIDE)
-			ft_printf("Is a hiden file\n");
 		else if (ptr->type == E_OTHER)
 			ft_printf("Is file or executable\n");
 		else if (ptr->type == E_CURRENT)

@@ -161,8 +161,6 @@ t_file	*ft_lst_file_new(char *name, char *dir, bool long_listing)
 			nw->type = E_FOLDER;
 		else
 			nw->type = E_OTHER;
-		if (nw->name[0] == '.')
-			nw->type = E_HIDE;
 		if (!ft_str_cmp(nw->name, "."))
 			nw->type = E_CURRENT;
 		else if (!ft_str_cmp(nw->name, ".."))

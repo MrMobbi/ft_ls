@@ -51,10 +51,13 @@ static void	ft_get_path_and_option(t_ls *ls, t_token *token)
 /* Manage the aplication of the option */
 static void	ft_apply_option(t_ls *ls)
 {
+	t_option	option;
+	option.hidden = ft_is_option(E_OPTION_A, ls->option);
+	option.time = ft_is_option(E_OPTION_T, ls->option);
+	option.reverse = ft_is_option(E_OPTION_R, ls->option);
+	option.hidden = ft_is_option(E_OPTION_L, ls->option);
 	ls->rec = ft_is_option(E_OPTION_CR, ls->option);
-	ft_option_rearrange(ls, ft_is_option(E_OPTION_T, ls->option));
-	if (ft_is_option(E_OPTION_R, ls->option))
-		ft_option_reverse(ls);
+	ft_option_rearrange(ls, option);
 }
 
 /* Will check how to print if there is multiple folder top print */

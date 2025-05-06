@@ -54,10 +54,9 @@ enum e_error{
 
 enum e_file_type {
 	E_FOLDER = 1,
-	E_HIDE = 2,
-	E_OTHER = 3,
-	E_CURRENT = 4,
-	E_PREVIOUS = 5,
+	E_OTHER = 2,
+	E_CURRENT = 3,
+	E_PREVIOUS = 4,
 };
 
 typedef struct	s_ls {
@@ -114,6 +113,7 @@ typedef struct s_option
 	bool	hidden;
 	bool	long_listing;
 	bool	time;
+	bool	reverse;
 }	t_option;
 
 typedef enum {
@@ -149,8 +149,7 @@ void	ft_lst_file_free(t_file *ptr);
 //	### OPTION ###
 char	*ft_option_get(t_token *ptr);
 void	ft_option_file_sort(t_file **head, bool time);
-void	ft_option_rearrange(t_ls *ls, bool time);
-void	ft_option_reverse(t_ls *ls);
+void	ft_option_rearrange(t_ls *ls, t_option option);
 
 //	### PATH ###
 t_path	*ft_path_get(t_token *ptr, bool hidden, bool long_listing);
@@ -173,8 +172,6 @@ char	*ft_str_dup(char *str);
 int		ft_str_cmp(char *str1, char *str2);
 char	*ft_str_join_path(char *start, char *file);
 bool	ft_is_option(char c, char *option);
-int		ft_cmp_time(const void *a, const void *b, compare_type type_cmp);
-int		ft_cmp_alpha(const void *a, const void *b, compare_type type_cmp);
-void	ft_sort_type(void **head, bool time, compare_type type_cmp);
+void	ft_sort_type(void **head, t_option option, compare_type type_cmp);
 
 #endif

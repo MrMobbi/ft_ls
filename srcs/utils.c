@@ -258,9 +258,27 @@ static void	ft_path_next_set(void *ptr, void *next)
 typedef int (*t_cmp_func)(const void *, const void *, compare_type);
 typedef void *(*t_get_next_func)(void *);
 typedef void (*t_set_next_func)(void *, void *);
-static void	*ft_swap(void *head, bool sort_by_time, bool file)
+void	*ft_reverse(void *head, bool file)
 {
-	t_cmp_func cmp = sort_by_time ? ft_cmp_time : ft_cmp_alpha;
+	t_get_next_func next_get = file ? ft_file_next_get : ft_path_next_get;
+	t_set_next_func next_set = file ? ft_file_next_set : ft_path_next_set;
+	void *prev = NULL;
+	void *curr = head;
+	void *next = NULL;
+
+	while (curr)
+	{
+		next = next_get(curr);
+		next_set(curr, prev);
+		prev = curr;
+		curr = next;
+	}
+	return (prev);
+}
+
+static void	*ft_swap(void *head, t_option option, bool file)
+{
+	t_cmp_func cmp = option.time ? ft_cmp_time : ft_cmp_alpha;
 	t_get_next_func next_get = file ? ft_file_next_get : ft_path_next_get;
 	t_set_next_func next_set = file ? ft_file_next_set : ft_path_next_set;
 	void	*ptr, *tmp, *prev;
@@ -291,21 +309,22 @@ static void	*ft_swap(void *head, bool sort_by_time, bool file)
 			}
 		}
 	} while (swapped);
+	if (option.reverse)
+		head = ft_reverse(head, file);
 	return (head);
 }
 
-void ft_sort_type(void **head, bool sort_by_time, compare_type type_cmp)
+void ft_sort_type(void **head, t_option option, compare_type type_cmp)
 {
 	if (!head || !*head)
 		return;
-
 	switch (type_cmp)
 	{
 		case TYPE_FILE:
-			*head = ft_swap((t_file*) *head, sort_by_time, true);
+			*head = ft_swap((t_file*) *head, option, true);
 			break ;
 		case TYPE_PATH:
-			*head = ft_swap((t_path*) *head, sort_by_time, false);
+			*head = ft_swap((t_path*) *head, option, false);
 			break ;
 		default:
 			ft_error("error cmp", 3);
