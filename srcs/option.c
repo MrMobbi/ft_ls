@@ -1,7 +1,6 @@
 
 #include "../incl/ft_ls.h"
 
-/* Check the number of dash given as token */
 static void	ft_option_check_dash(char *str)
 {
 	int dash = 0;
@@ -11,12 +10,14 @@ static void	ft_option_check_dash(char *str)
 		dash++;
 	}
 	if (dash == 2 && ft_str_cmp(str, "help") == 0)
+	{
 		ft_print_help();
+		exit (0);
+	}
 	else if (dash > 1)
 		ft_error_dash(str);
 }
 
-/* Check if the option given is a valid option */
 void	ft_option_check_error(char c)
 {
 	char	*option = D_ALL_OPTION;
@@ -29,7 +30,6 @@ void	ft_option_check_error(char c)
 	ft_error_option(c);
 }
 
-/* Check if the option is already seen */
 static bool	ft_option_not_seen(char *str, char c)
 {
 	if (str == NULL)
@@ -42,7 +42,6 @@ static bool	ft_option_not_seen(char *str, char c)
 	return (true);
 }
 
-/* Will add the previous option with the new option found */
 static char	*ft_option_join(char *str, char c)
 {
 	int		i = 0;
@@ -69,9 +68,6 @@ static char	*ft_option_join(char *str, char c)
 	return (nw);
 }
 
-/* Will check if the option already exist in the string
- * where the option is stored for the main struct, 
- * if not the option is added to the string */
 static char	*ft_option_add(char *option, char *add)
 {
 	while (*add == '-')
@@ -85,8 +81,6 @@ static char	*ft_option_add(char *option, char *add)
 	return (option);
 }
 
-/* Will iterate in the list of token to get the option
- * and initiate a string with all the valid option */
 char	*ft_option_get(t_token *ptr)
 {
 	char	*option = NULL;
@@ -100,44 +94,4 @@ char	*ft_option_get(t_token *ptr)
 		ptr = ptr->next;
 	}
 	return (option);
-}
-
-/* this function rearange order of the token in an alphabetic order */
-void ft_option_rearrange(t_ls *ls, t_option option)
-{
-	t_path	*node = ls->path;
-	t_path	*file_head = NULL, *file_tail = NULL;
-	t_path	*folder_head = NULL, *folder_tail = NULL;
-	while (node != NULL)
-	{
-		t_path *next = node->next;
-		node->next = NULL;
-		if (node->folder)
-		{
-			ft_sort_type((void**)&node->file, option, TYPE_FILE);
-			if (!folder_head)
-				folder_head = folder_tail = node;
-			else
-				folder_tail = folder_tail->next = node;
-		}
-		else
-		{
-			if (!file_head)
-				file_head = file_tail = node;
-			else
-				file_tail = file_tail->next = node;
-		}
-		node = next;
-	}
-	ft_sort_type((void **)&file_head, option, TYPE_FILE);
-	ft_sort_type((void **)&folder_head, option, TYPE_PATH);
-	if (file_tail != NULL)
-	{
-		file_tail = file_head;
-		while (file_tail->next != NULL)
-			file_tail = file_tail->next;
-		if (file_tail != NULL)
-			file_tail->next = folder_head;
-	}
-	ls->path = file_head ? file_head : folder_head;
 }

@@ -5,8 +5,6 @@
 // ###   TOKEN   ###
 // #################
 
-/* Create a new token and determinate if 
- * it an option or a path */
 t_token	*ft_lst_token_new(char *str)
 {
 	t_token	*nw = malloc(sizeof(t_token));
@@ -20,7 +18,6 @@ t_token	*ft_lst_token_new(char *str)
 	return (nw);
 }
 
-/* Add a new chain to the end of the list */
 void	ft_lst_token_add(t_token *ptr, t_token *nw)
 {
 	while (ptr->next != NULL)
@@ -28,7 +25,6 @@ void	ft_lst_token_add(t_token *ptr, t_token *nw)
 	ptr->next = nw;
 }
 
-/* Go trough the list and free all allocation */
 void	ft_lst_token_free(t_token *ptr)
 {
 	t_token	*tmp;
@@ -44,8 +40,6 @@ void	ft_lst_token_free(t_token *ptr)
 // ###   PATH   ###
 // ################
 
-/* Create a new path and determinate if the path is valid
- * and if the path is a folder or a file */
 t_path	*ft_lst_path_new(char *str, t_option option)
 {
 	t_path	*nw = malloc(sizeof(t_path));

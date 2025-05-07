@@ -1,7 +1,6 @@
 
 #include "../incl/ft_ls.h"
 
-/* Tokenizing the prompt */
 static t_token	*ft_get_token(int ac, char **av)
 {
 	t_token	*token = NULL;
@@ -18,9 +17,6 @@ static t_token	*ft_get_token(int ac, char **av)
 	return (token);	
 }
 
-/* It is possible that only the option has been
- * given in that case this function will add
- * the current folder as default path */
 static void	ft_token_check_path(t_token *ptr)
 {
 	bool	path = false;
@@ -38,8 +34,6 @@ static void	ft_token_check_path(t_token *ptr)
 		ft_lst_token_add(ptr, ft_lst_token_new(D_DEFAULT_PATH));
 }
 
-/* Will initiate the option for the main struc
- * and get all the paths for printing*/
 static void	ft_get_path_and_option(t_ls *ls, t_token *token)
 {
 	ls->option = ft_option_get(token);
@@ -48,7 +42,6 @@ static void	ft_get_path_and_option(t_ls *ls, t_token *token)
 			ft_is_option(E_OPTION_L, ls->option));
 }
 
-/* Manage the aplication of the option */
 static void	ft_apply_option(t_ls *ls)
 {
 	t_option	option;
@@ -57,10 +50,9 @@ static void	ft_apply_option(t_ls *ls)
 	option.reverse = ft_is_option(E_OPTION_R, ls->option);
 	option.hidden = ft_is_option(E_OPTION_L, ls->option);
 	ls->rec = ft_is_option(E_OPTION_CR, ls->option);
-	ft_option_rearrange(ls, option);
+	ft_path_rearrange(ls, option);
 }
 
-/* Will check how to print if there is multiple folder top print */
 static void	ft_is_multiple(t_ls *ls)
 {
 	t_path	*node = ls->path;
@@ -83,7 +75,6 @@ static void	ft_is_multiple(t_ls *ls)
 	}
 }
 
-/* Manage how to endle the token */
 void	ft_extract_path_and_option(int ac, char **av, t_ls *ls)
 {
 	t_token	*token;

@@ -1,6 +1,13 @@
 
 #include "../incl/ft_ls.h"
 
+static void	ft_print_error(int err, char *name)
+{
+	if (err == E_ERR_EXIST)
+		ft_printf("%s%s%s\n",D_ERR_MSG_EXIS_1, name, D_ERR_MSG_EXIS_2);
+	else if (err == E_ERR_ACCESS)
+		ft_printf("%s%s%s\n", D_ERR_MSG_PERM_1, name, D_ERR_MSG_PERM_2);
+}
 
 static void	ft_print_permissions(mode_t mode)
 {
@@ -70,6 +77,11 @@ static void	ft_print_block(t_file *ptr)
 
 static void	ft_print_path_name(t_path *path, bool multiple, bool extand)
 {
+	if (path->error)
+	{
+		ft_print_error(path->error, path->name);
+		return ;
+	}
 	if (path->folder != true)
 	{
 		if (extand)
@@ -81,8 +93,8 @@ static void	ft_print_path_name(t_path *path, bool multiple, bool extand)
 		ft_printf("%s:\n", path->name);
 	if (!path->folder && path->next != NULL && path->next->folder != true)
 		ft_printf("  ");
-	else if (path->next != NULL)
-		ft_printf("\n");
+	else if (!path->folder && path->next)
+		ft_printf("\n\n");
 }
 
 static void	ft_print_file(t_file *ptr, bool extand)
@@ -140,13 +152,17 @@ void	ft_print(t_ls *ls)
 	option.reverse = ft_is_option(E_OPTION_R, ls->option);
 	while (path != NULL)
 	{
-		if (ls->rec == true)
+		if (ls->rec)
 			ft_print_recursive(ls->path, option);
 		else
 		{
 			ft_print_path_name(path, ls->multiple, option.long_listing);
-			if (path->folder == true)
+			if (path->folder && !path->error)
+			{
 				ft_print_file(path->file, option.long_listing);
+				if (path->next)
+					printf("\n");
+			}
 		}
 		path = path->next;
 	}
@@ -155,7 +171,7 @@ void	ft_print(t_ls *ls)
 /* Print help message on how to use 'ls' */
 void	ft_print_help(void)
 {
-	ft_printf("Usage: ls [OPTION]... [FILE]...\n"\
+	ft_printf("Usage: ft_ls [OPTION]... [FILE]...\n"\
 			"List information about the FILEs (the current directory by default).\n"\
 			"Sort entries alphabetically if -tr is specified.\n\n"\
 			"Mandatory arguments to long options are mandatory for short options too.\n"\
@@ -169,18 +185,10 @@ void	ft_print_help(void)
 			"Binary prefixes can be used, too: KiB=K, MiB=M, and so on.\n\n"\
 			"The TIME_STYLE argument can be full-iso, long-iso, iso, locale, or +FORMAT.\n"\
 			"FORMAT is interpreted like in date(1).  If FORMAT is FORMAT1<newline>FORMAT2,\n"\
-			"then FORMAT1 applies to non-recent files and FORMAT2 to recent files.\n"\
-			"TIME_STYLE prefixed with 'posix-' takes effect only outside the POSIX locale.\n"\
 			"Also the TIME_STYLE environment variable sets the default style to use.\n\n"\
-			"The WHEN argument defaults to 'always' and can also be 'auto' or 'never'.\n\n"\
-			"Using color to distinguish file types is disabled both by default and\n"\
-			"with --color=never.  With --color=auto, ls emits color codes only when\n"\
-			"standard output is connected to a terminal.  The LS_COLORS environment\n"\
-			"variable can change the settings.  Use the dircolors(1) command to set it.\n\n"\
 			"Exit status:\n"\
 			" 0  if OK,\n"\
 			" 1  if minor problems (e.g., cannot access subdirectory),\n"\
 			" 2  if serious trouble (e.g., cannot access command-line argument).\n"\
 			"Full documentation <https://github.com/MrMobbi/ft_ls>\n");
-	exit(0);
 }

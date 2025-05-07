@@ -1,6 +1,5 @@
 #include "../incl/ft_ls.h"
 
-// ## Hexa ##
 static int	ft_put_address_hexa(unsigned long long nbr)
 {
 	static int	count;
@@ -52,7 +51,6 @@ static int	ft_put_uphexa(unsigned int nbr)
 	return (count1);
 }
 
-// ## sort ##
 static int	ft_sort(va_list args, char c)
 {
 	int	count;

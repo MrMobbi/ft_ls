@@ -20,9 +20,13 @@
 
 //	ERROR MSG
 # define D_ERR_MSG_MALLOC			"Malloc failled"
-# define D_ERR_MSG_UNRECO_OPTION	"ls: unrecognized option:"
-# define D_ERR_MSG_INVALID_OPTION	"ls: invalide option:"
-# define D_ERR_MSG_HELP				"Try 'ls --help' for mode information"
+# define D_ERR_MSG_UNRECO_OPTION	"ft_ls: unrecognized option:"
+# define D_ERR_MSG_INVALID_OPTION	"ft_ls: invalide option:"
+# define D_ERR_MSG_HELP				"Try 'ft_ls --help' for mode information"
+# define D_ERR_MSG_EXIS_1			"ft_ls: cannot access '"
+# define D_ERR_MSG_EXIS_2			"': No such file or directory"
+# define D_ERR_MSG_PERM_1			"ft_ls: cannot open directory '"
+# define D_ERR_MSG_PERM_2			"': Permission denied"
 
 // OTHER DEFINE
 # define D_DEFAULT_PATH		"."
@@ -153,10 +157,10 @@ void	ft_lst_file_free(t_file *ptr);
 //	### OPTION ###
 char	*ft_option_get(t_token *ptr);
 void	ft_option_file_sort(t_file **head, bool time);
-void	ft_option_rearrange(t_ls *ls, t_option option);
 
 //	### PATH ###
 t_path	*ft_path_get(t_token *ptr, bool hidden, bool long_listing);
+void	ft_path_rearrange(t_ls *ls, t_option option);
 
 //	### PRINT ###
 void	ft_print(t_ls *ls);
