@@ -236,24 +236,16 @@ bool	ft_is_option(char c, char *option)
 }
 
 static void	*ft_file_next_get(void *ptr)
-{
-	return (((t_file *)ptr)->next);
-}
+{ return (((t_file *)ptr)->next); }
 
 static void	*ft_path_next_get(void *ptr)
-{
-	return (((t_path *)ptr)->next);
-}
+{ return (((t_path *)ptr)->next); }
 
 static void	ft_file_next_set(void *ptr, void *next)
-{
-	((t_file *)ptr)->next = (t_file *)next;
-}
+{ ((t_file *)ptr)->next = (t_file *)next; }
 
 static void	ft_path_next_set(void *ptr, void *next)
-{
-	((t_file *)ptr)->next = (t_file *)next;
-}
+{ ((t_file *)ptr)->next = (t_file *)next; }
 
 typedef int (*t_cmp_func)(const void *, const void *, compare_type);
 typedef void *(*t_get_next_func)(void *);
@@ -276,7 +268,7 @@ void	*ft_reverse(void *head, bool file)
 	return (prev);
 }
 
-static void	*ft_swap(void *head, t_option option, bool file)
+void	*ft_swap(void *head, t_option option, bool file)
 {
 	t_cmp_func cmp = option.time ? ft_cmp_time : ft_cmp_alpha;
 	t_get_next_func next_get = file ? ft_file_next_get : ft_path_next_get;
@@ -312,21 +304,4 @@ static void	*ft_swap(void *head, t_option option, bool file)
 	if (option.reverse)
 		head = ft_reverse(head, file);
 	return (head);
-}
-
-void ft_sort_type(void **head, t_option option, compare_type type_cmp)
-{
-	if (!head || !*head)
-		return;
-	switch (type_cmp)
-	{
-		case TYPE_FILE:
-			*head = ft_swap((t_file*) *head, option, true);
-			break ;
-		case TYPE_PATH:
-			*head = ft_swap((t_path*) *head, option, false);
-			break ;
-		default:
-			ft_error("error cmp", 3);
-	}
 }

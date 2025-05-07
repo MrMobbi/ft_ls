@@ -47,6 +47,8 @@ t_path	*ft_lst_path_new(char *str, t_option option)
 		ft_error(D_ERR_MSG_MALLOC, E_ERR_MALLOC);
 	nw->name = ft_str_dup(str);
 	nw->folder = false;
+	nw->link = false;
+	nw->error = 0;
 	nw->next = NULL;
 	nw->file = NULL;
 	nw->extand = NULL;
@@ -55,7 +57,10 @@ t_path	*ft_lst_path_new(char *str, t_option option)
 	if (lstat(nw->name, &st) != 0)
 	{
 		if (errno == ENOENT)
+		{
 			nw->error = E_ERR_EXIST;
+			return (nw);
+		}
 		else
 			ft_error(str, errno);
 	}
@@ -164,10 +169,7 @@ t_file	*ft_lst_file_new(char *name, char *dir, bool long_listing)
 			nw->type = E_PREVIOUS;
 	}
 	else
-	{
-		printf("%s | %d", strerror(errno), errno);;
-		exit(3); // todo proper exit
-	}
+		ft_error(name, errno);
 	return (nw);
 }
 

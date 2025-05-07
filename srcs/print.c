@@ -69,7 +69,7 @@ static void	ft_print_block(t_file *ptr)
 		if (lstat(ptr->path, &st) == 0)
 			total_blocks += st.st_blocks;
 		else
-			ft_error("", 1);
+			ft_error(ptr->path, 1);
 		ptr = ptr->next;
 	}
 	ft_printf("total %d\n", total_blocks / 2);
@@ -133,7 +133,7 @@ static void	ft_print_recursive(t_path *path, t_option option)
 		{
 			char	*path_name = ft_str_join_path(path->name, ptr->name);
 			t_path	*rec = ft_lst_path_new(path_name, option);
-			ft_sort_type((void**)&rec->file, option, TYPE_FILE);
+			rec->file = ft_swap(rec->file, option, true);
 			ft_print_recursive(rec, option);
 			free(path_name);
 			free(rec);
@@ -153,7 +153,7 @@ void	ft_print(t_ls *ls)
 	while (path != NULL)
 	{
 		if (ls->rec)
-			ft_print_recursive(ls->path, option);
+			ft_print_recursive(path, option);
 		else
 		{
 			ft_print_path_name(path, ls->multiple, option.long_listing);
@@ -161,7 +161,7 @@ void	ft_print(t_ls *ls)
 			{
 				ft_print_file(path->file, option.long_listing);
 				if (path->next)
-					printf("\n");
+					ft_printf("\n");
 			}
 		}
 		path = path->next;

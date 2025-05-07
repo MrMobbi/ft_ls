@@ -35,7 +35,7 @@ void	ft_path_rearrange(t_ls *ls, t_option option)
 		node->next = NULL;
 		if (node->folder)
 		{
-			ft_sort_type((void**)&node->file, option, TYPE_FILE);
+			node->file = ft_swap(node->file, option, false);
 			if (!folder_head)
 				folder_head = folder_tail = node;
 			else
@@ -57,16 +57,22 @@ void	ft_path_rearrange(t_ls *ls, t_option option)
 		}
 		node = next;
 	}
-	ft_sort_type((void **)&file_head, option, TYPE_PATH);
-	ft_sort_type((void **)&error_head, option, TYPE_PATH);
-	ft_sort_type((void **)&folder_head, option, TYPE_PATH);
-	if (file_tail != NULL)
+	file_head = ft_swap(file_head, option, false);
+	error_head = ft_swap(error_head, option, false);
+	folder_head = ft_swap(folder_head, option, false);
+	if (error_head)
+	{
+		error_tail = error_head;
+		while (error_tail->next != NULL)
+			error_tail = error_tail->next;
+		error_tail->next = file_head;
+	}
+	if (file_head)
 	{
 		file_tail = file_head;
 		while (file_tail->next != NULL)
 			file_tail = file_tail->next;
-		if (file_tail != NULL)
-			file_tail->next = folder_head;
+		file_tail->next = folder_head;
 	}
-	ls->path = file_head ? file_head : folder_head;
+	ls->path = error_head ? error_head : (file_head ? file_head : folder_head);
 }

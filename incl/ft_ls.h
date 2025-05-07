@@ -58,9 +58,10 @@ enum e_error{
 
 enum e_file_type {
 	E_FOLDER = 1,
-	E_OTHER = 2,
-	E_CURRENT = 3,
-	E_PREVIOUS = 4,
+	E_LINK = 2,
+	E_OTHER = 3,
+	E_CURRENT = 4,
+	E_PREVIOUS = 5,
 };
 
 typedef struct	s_ls {
@@ -80,6 +81,7 @@ typedef struct s_token {
 typedef struct	s_path {
 	char	*name;
 	bool	folder;
+	bool	link;
 	int		error;
 	time_t	time;
 	struct s_long	*extand;
@@ -180,6 +182,6 @@ char	*ft_str_dup(char *str);
 int		ft_str_cmp(char *str1, char *str2);
 char	*ft_str_join_path(char *start, char *file);
 bool	ft_is_option(char c, char *option);
-void	ft_sort_type(void **head, t_option option, compare_type type_cmp);
+void	*ft_swap(void *head, t_option option, bool file);
 
 #endif
