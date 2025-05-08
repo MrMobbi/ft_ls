@@ -96,7 +96,7 @@ char	*ft_str_dup(char *str)
 {
 	char	*new = malloc(ft_strlen(str) + 1);
 	if (!new)
-		ft_error(D_ERR_MSG_MALLOC, E_ERR_MALLOC);
+		ft_error(D_ERR_MSG_MALLOC);
 	for (size_t i = 0; i < ft_strlen(str); i++)
 		new[i] = str[i];
 	new[ft_strlen(str)] = '\0';
@@ -120,7 +120,7 @@ char	*ft_str_join_path(char *start, char *file)
 	char	*path = malloc(sizeof(char) * (ft_strlen(start) + \
 										   ft_strlen(file) + 2));
 	if (!path)
-		ft_error(D_ERR_MSG_MALLOC, E_ERR_MALLOC);
+		ft_error(D_ERR_MSG_MALLOC);
 	size_t	current = 0;
 	for (size_t i = 0; i < ft_strlen(start); i++)
 	{
@@ -166,7 +166,7 @@ int	ft_cmp_alpha(const void *a, const void *b, compare_type type_cmp)
 			str2 = cmp_b.path->name;
 			break ;
 		default:
-			ft_error("Error cmp alpha", 3);
+			ft_error("Error cmp alpha");
 	}
 	if (ft_str_cmp(str1, "..") == 0 && ft_str_cmp(str2, ".") == 0)
 		return (1);
@@ -215,7 +215,7 @@ int ft_cmp_time(const void *a, const void *b, compare_type type_cmp)
 			time_b = cmp_b.path->time;
 			break ;
 		default:
-			ft_error("Error cmp time", 3);
+			ft_error("Error cmp time");
 	}
 	if (time_a == time_b)
 		return (ft_cmp_alpha(a, b, type_cmp));

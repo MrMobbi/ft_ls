@@ -69,7 +69,7 @@ static void	ft_print_block(t_file *ptr)
 		if (lstat(ptr->path, &st) == 0)
 			total_blocks += st.st_blocks;
 		else
-			ft_error(ptr->path, 1);
+			ft_error(D_ERR_MSG_STAT);
 		ptr = ptr->next;
 	}
 	ft_printf("total %d\n", total_blocks / 2);

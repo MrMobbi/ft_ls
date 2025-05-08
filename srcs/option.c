@@ -47,12 +47,12 @@ static char	*ft_option_join(char *str, char c)
 	int		i = 0;
 	char	*nw = malloc(sizeof(char) * ft_strlen(str) + 2);
 	if (!nw)
-		ft_error(D_ERR_MSG_MALLOC, E_ERR_MALLOC);
+		ft_error(D_ERR_MSG_MALLOC);
 	if (str == NULL)
 	{
 		str = malloc(sizeof(char) * 2);
 		if (!str)
-			ft_error(D_ERR_MSG_MALLOC, E_ERR_MALLOC);
+			ft_error(D_ERR_MSG_MALLOC);
 		str[0] = c;
 		str[1] = '\0';
 		return str;

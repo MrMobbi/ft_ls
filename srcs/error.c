@@ -1,10 +1,10 @@
 
 #include "../incl/ft_ls.h"
 
-void	ft_error(char *msg, int rt_error)
+void	ft_error(char *msg)
 {
 	perror(msg);
-	exit(rt_error);
+	exit(2);
 }
 
 void	ft_error_dash(char *unknow)

@@ -5,7 +5,7 @@ static t_long	*ft_init_long_listing(struct stat st)
 {
 	t_long	*nw = malloc(sizeof(t_long));
 	if (!nw)
-		ft_error(D_ERR_MSG_MALLOC, E_ERR_MALLOC);
+		ft_error(D_ERR_MSG_MALLOC);
 	nw->time = nw->time;
 	nw->mode = st.st_mode;
 	nw->nlink = st.st_nlink;
@@ -23,7 +23,7 @@ t_token	*ft_lst_token_new(char *str)
 {
 	t_token	*nw = malloc(sizeof(t_token));
 	if (!nw)
-		ft_error(D_ERR_MSG_MALLOC, E_ERR_MALLOC);
+		ft_error(D_ERR_MSG_MALLOC);
 	nw->name = ft_str_dup(str);
 	nw->next = NULL;
 	nw->option = false;
@@ -58,7 +58,7 @@ t_path	*ft_lst_path_new(char *str, t_option option)
 {
 	t_path	*nw = malloc(sizeof(t_path));
 	if (!nw)
-		ft_error(D_ERR_MSG_MALLOC, E_ERR_MALLOC);
+		ft_error(D_ERR_MSG_MALLOC);
 	nw->name = ft_str_dup(str);
 	nw->folder = false;
 	nw->link = false;
@@ -76,10 +76,13 @@ t_path	*ft_lst_path_new(char *str, t_option option)
 			return (nw);
 		}
 		else
-			ft_error(str, errno);
+			ft_error(D_ERR_MSG_STAT);
 	}
 	if (S_ISLNK(st.st_mode) && !option.long_listing)
-		stat(nw->name, &st);
+	{
+		if (stat(nw->name, &st))
+			ft_error(D_ERR_MSG_STAT);
+	}
 	nw->time = st.st_mtime;
 	if (option.long_listing)
 		nw->extand = ft_init_long_listing(st);
@@ -144,7 +147,7 @@ t_file	*ft_lst_file_new(char *name, char *dir, bool long_listing)
 {
 	t_file	*nw = malloc(sizeof(t_file));
 	if (!nw)
-		ft_error(D_ERR_MSG_MALLOC, E_ERR_MALLOC);
+		ft_error(D_ERR_MSG_MALLOC);
 	nw->name = ft_str_dup(name);
 	nw->path = ft_str_join_path(dir, name);
 	nw->next = NULL;
@@ -165,7 +168,7 @@ t_file	*ft_lst_file_new(char *name, char *dir, bool long_listing)
 			nw->type = E_PREVIOUS;
 	}
 	else
-		ft_error(name, errno);
+		ft_error(D_ERR_MSG_STAT);
 	return (nw);
 }
 

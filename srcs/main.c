@@ -6,7 +6,7 @@ static int ft_return_status(t_path *path)
 	while (path)
 	{
 		if (path->error)
-			return (2);
+			return (1);
 		path = path->next;
 	}
 	return (0);

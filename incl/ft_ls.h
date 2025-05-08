@@ -20,6 +20,7 @@
 
 //	ERROR MSG
 # define D_ERR_MSG_MALLOC			"Malloc failled"
+# define D_ERR_MSG_STAT				"Unexpexted error of stat"
 # define D_ERR_MSG_UNRECO_OPTION	"ft_ls: unrecognized option:"
 # define D_ERR_MSG_INVALID_OPTION	"ft_ls: invalide option:"
 # define D_ERR_MSG_HELP				"Try 'ft_ls --help' for mode information"
@@ -50,7 +51,6 @@ enum e_option {
 };
 
 enum e_error{
-	E_ERR_MALLOC = 1,
 	E_ERR_EXIT = 2,
 	E_ERR_ACCESS = 3,
 	E_ERR_EXIST = 4,
@@ -138,7 +138,7 @@ void	db_print_path(t_path *ptr);
 void	db_print_file(t_file *ptr);
 
 //	### ERROR ###
-void	ft_error(char *msg, int rt_error);
+void	ft_error(char *msg);
 void	ft_error_dash(char *unknow);
 void	ft_error_option(char c);
 
