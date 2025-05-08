@@ -1,6 +1,20 @@
 
 #include "../incl/ft_ls.h"
 
+static t_long	*ft_init_long_listing(struct stat st)
+{
+	t_long	*nw = malloc(sizeof(t_long));
+	if (!nw)
+		ft_error(D_ERR_MSG_MALLOC, E_ERR_MALLOC);
+	nw->time = nw->time;
+	nw->mode = st.st_mode;
+	nw->nlink = st.st_nlink;
+	nw->uid = st.st_uid;
+	nw->gid = st.st_gid;
+	nw->size = st.st_size;
+	return (nw);
+}
+
 // #################
 // ###   TOKEN   ###
 // #################
@@ -64,19 +78,11 @@ t_path	*ft_lst_path_new(char *str, t_option option)
 		else
 			ft_error(str, errno);
 	}
+	if (S_ISLNK(st.st_mode) && !option.long_listing)
+		stat(nw->name, &st);
 	nw->time = st.st_mtime;
 	if (option.long_listing)
-	{
-		nw->extand = malloc(sizeof(t_long));
-		if (!nw->extand)
-			ft_error(D_ERR_MSG_MALLOC, E_ERR_MALLOC);
-		nw->extand->time = nw->time;
-		nw->extand->mode = st.st_mode;
-		nw->extand->nlink = st.st_nlink;
-		nw->extand->uid = st.st_uid;
-		nw->extand->gid = st.st_gid;
-		nw->extand->size = st.st_size;
-	}
+		nw->extand = ft_init_long_listing(st);
 	if (S_ISDIR(st.st_mode))
 	{
 		DIR				*p_dir;
@@ -143,23 +149,13 @@ t_file	*ft_lst_file_new(char *name, char *dir, bool long_listing)
 	nw->path = ft_str_join_path(dir, name);
 	nw->next = NULL;
 	nw->extand = NULL;
-	struct stat	s;
-	if (lstat(nw->path, &s) == 0)
+	struct stat	st;
+	if (lstat(nw->path, &st) == 0)
 	{
-		nw->time = s.st_mtime;
+		nw->time = st.st_mtime;
 		if (long_listing)
-		{
-			nw->extand = malloc(sizeof(t_long));
-			if (!nw->extand)
-				ft_error(D_ERR_MSG_MALLOC, E_ERR_MALLOC);
-			nw->extand->time = nw->time;
-			nw->extand->mode = s.st_mode;
-			nw->extand->nlink = s.st_nlink;
-			nw->extand->uid = s.st_uid;
-			nw->extand->gid = s.st_gid;
-			nw->extand->size = s.st_size;
-		}
-		if (S_ISDIR(s.st_mode))
+			nw->extand = ft_init_long_listing(st);
+		if (S_ISDIR(st.st_mode))
 			nw->type = E_FOLDER;
 		else
 			nw->type = E_OTHER;

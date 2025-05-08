@@ -31,7 +31,7 @@ static void	ft_print_permissions(mode_t mode)
 	ft_putchar((mode & S_IXOTH) ? 'x' : '-');
 }
 
-void	ft_print_extanded(t_long *extand, char *name)
+static void	ft_print_extanded(t_long *extand, char *name, char *path)
 {
 	struct passwd	*pw = getpwuid(extand->uid);
 	struct group	*gr = getgrgid(extand->gid);
@@ -51,7 +51,7 @@ void	ft_print_extanded(t_long *extand, char *name)
 	if (S_ISLNK(extand->mode))
 	{
 		char buf[1024];
-		ssize_t len = readlink(name, buf, sizeof(buf) - 1);
+		ssize_t len = readlink(path, buf, sizeof(buf) - 1);
 		if (len != -1)
 		{
 			buf[len] = '\0';
@@ -85,7 +85,7 @@ static void	ft_print_path_name(t_path *path, bool multiple, bool extand)
 	if (path->folder != true)
 	{
 		if (extand)
-			ft_print_extanded(path->extand, path->name);
+			ft_print_extanded(path->extand, path->name, path->name);
 		else
 			ft_printf("%s", path->name);
 	}
@@ -105,7 +105,7 @@ static void	ft_print_file(t_file *ptr, bool extand)
 	{
 		if (extand)
 		{
-			ft_print_extanded(ptr->extand, ptr->name);
+			ft_print_extanded(ptr->extand, ptr->name, ptr->path);
 			if (ptr->next != NULL)
 				ft_printf("\n");
 		}
