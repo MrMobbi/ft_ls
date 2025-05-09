@@ -136,7 +136,7 @@ static void	ft_print_recursive(t_path *path, t_option option)
 			rec->file = ft_swap(rec->file, option, true);
 			ft_print_recursive(rec, option);
 			free(path_name);
-			free(rec);
+			ft_lst_path_free(rec);
 		}
 		ptr = ptr->next;
 	}

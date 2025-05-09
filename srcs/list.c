@@ -6,7 +6,7 @@ static t_long	*ft_init_long_listing(struct stat st)
 	t_long	*nw = malloc(sizeof(t_long));
 	if (!nw)
 		ft_error(D_ERR_MSG_MALLOC);
-	nw->time = nw->time;
+	nw->time = st.st_mtime;
 	nw->mode = st.st_mode;
 	nw->nlink = st.st_nlink;
 	nw->uid = st.st_uid;
@@ -45,6 +45,7 @@ void	ft_lst_token_free(t_token *ptr)
 	while (ptr != NULL)
 	{
 		tmp = ptr->next;
+		free(ptr->name);
 		free(ptr);
 		ptr = tmp;
 	}
@@ -132,7 +133,7 @@ void	ft_lst_path_free(t_path *ptr)
 		free(ptr->name);
 		if (ptr->folder == true)
 			ft_lst_file_free(ptr->file);
-		if (ptr->extand)
+		if (ptr->extand != NULL)
 			free(ptr->extand);
 		free(ptr);
 		ptr = tmp;
@@ -187,7 +188,7 @@ void	ft_lst_file_free(t_file *ptr)
 		tmp = ptr->next;
 		free(ptr->name);
 		free(ptr->path);
-		if (ptr->extand)
+		if (ptr->extand != NULL)
 			free(ptr->extand);
 		free(ptr);
 		ptr = tmp;

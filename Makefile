@@ -1,7 +1,7 @@
 
 # COMPILATION
 CC				= gcc 
-FLAGS			= -Wall -Werror -Wextra -g
+FLAGS			= -Wall -Werror -Wextra -g3
 
 # EXECUTABLE
 NAME		= ft_ls

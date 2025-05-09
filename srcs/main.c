@@ -15,6 +15,8 @@ static int ft_return_status(t_path *path)
 static int	ft_quit(t_ls *ls)
 {
 	ls->return_status = ft_return_status(ls->path);
+	if (ls->option != NULL)
+		free(ls->option);
 	ft_lst_path_free(ls->path);
 	return (ls->return_status);
 }

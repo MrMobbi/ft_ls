@@ -50,12 +50,9 @@ static char	*ft_option_join(char *str, char c)
 		ft_error(D_ERR_MSG_MALLOC);
 	if (str == NULL)
 	{
-		str = malloc(sizeof(char) * 2);
-		if (!str)
-			ft_error(D_ERR_MSG_MALLOC);
-		str[0] = c;
-		str[1] = '\0';
-		return str;
+		nw[0] = c;
+		nw[1] = '\0';
+		return (nw);
 	}
 	while (str[i] != '\0')
 	{
